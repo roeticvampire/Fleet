@@ -231,7 +231,7 @@
         android:layout_marginBottom="40dp"
         android:background="#00FFFFFF"
         android:paddingVertical="36dp"
-        app:layout_constraintBottom_toTopOf="@+id/imageButton2"
+        app:layout_constraintBottom_toTopOf="@+id/login_btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
