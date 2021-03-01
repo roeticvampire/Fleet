@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_dark"
+    android:orientation="vertical"
+    android:padding="@dimen/box_inset_layout_padding"
+    tools:context=".RegisterActivity">
+
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="229dp"
+        android:padding="@dimen/inner_frame_layout_padding"
+        android:text="Button" />
+
+    <LinearLayout
+        android:id="@+id/name"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/label_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24sp"
+            android:fontFamily="@font/gotham_medium"
+            android:padding="@dimen/inner_frame_layout_padding"
+            android:text="Name"
+            android:textColor="@color/dark_blue"
+            android:textColorHighlight="@color/dark_blue"
+            android:textColorHint="@color/dark_blue"
+            android:textColorLink="@color/dark_blue"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/input_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24sp"
+            android:background="@drawable/input_border"
+            android:ems="10"
+            android:fontFamily="@font/gotham_book"
+            android:imeActionLabel="@string/app_name"
+            android:includeFontPadding="true"
+            android:inputType="textPersonName"
+            android:labelFor="@id/button"
+            android:paddingHorizontal="8sp"
+            android:paddingVertical="12sp"
+            android:paddingLeft="12sp"
+            android:paddingRight="12sp"
+            android:textColor="@color/light_blue"
+            android:textColorHighlight="@color/light_blue"
+            android:textSize="18dp" />
+    </LinearLayout>
+</LinearLayout>
