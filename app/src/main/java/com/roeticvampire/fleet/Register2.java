@@ -1,23 +1,19 @@
 package com.roeticvampire.fleet;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.theartofdev.edmodo.cropper.CropImage;
-import com.theartofdev.edmodo.cropper.CropImageView;
 
 public class Register2 extends AppCompatActivity {
 
@@ -32,7 +28,7 @@ public class Register2 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register2);
         tap_to_change=findViewById(R.id.rand);
-        imageChooser=findViewById(R.id.Imagechooser);
+        imageChooser=findViewById(R.id.recycler_imageView);
         imageChooser.setMinimumHeight(imageChooser.getWidth());
         tap_to_change.setOnLongClickListener(new View.OnLongClickListener(){
 
