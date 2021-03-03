@@ -6,23 +6,21 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageButton;
 
 import java.util.ArrayList;
 
 public class ChatlistActivity extends AppCompatActivity {
     chatlistAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chatlist);
 
         ArrayList<chatlist_component> animalNames = new ArrayList<>();
-        animalNames.add(new chatlist_component("Spiderman", "jaal khatam ho raha... need help", R.drawable.default_profile_image, "11:39PM"));
-        animalNames.add(new chatlist_component("Spiderman", "jaal khatam ho raha... need help", R.drawable.default_profile_image, "11:39PM"));
-        animalNames.add(new chatlist_component("Spiderman", "jaal khatam ho raha... need help", R.drawable.default_profile_image, "11:39PM"));
-        animalNames.add(new chatlist_component("Spiderman", "jaal khatam ho raha... need help", R.drawable.default_profile_image, "11:39PM"));
-        animalNames.add(new chatlist_component("Spiderman", "jaal khatam ho raha... need help", R.drawable.default_profile_image, "11:39PM"));
-        animalNames.add(new chatlist_component("Spiderman", "jaal khatam ho raha... need help", R.drawable.default_profile_image, "11:39PM"));
         animalNames.add(new chatlist_component("Spiderman", "jaal khatam ho raha... need help", R.drawable.default_profile_image, "11:39PM"));
         animalNames.add(new chatlist_component("Spiderman", "jaal khatam ho raha... need help", R.drawable.default_profile_image, "11:39PM"));
         animalNames.add(new chatlist_component("Spiderman", "jaal khatam ho raha... need help", R.drawable.default_profile_image, "11:39PM"));
@@ -34,6 +32,10 @@ public class ChatlistActivity extends AppCompatActivity {
         adapter = new chatlistAdapter(this, animalNames);
         recyclerView.setAdapter(adapter);
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+
+
+
+
 
     }
 }

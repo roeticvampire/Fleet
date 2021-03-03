@@ -11,12 +11,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-public class chatlistAdapter extends RecyclerView.Adapter<chatlistAdapter.ViewHolder> {
-    private List<chatlist_component> mData;
+public class chatboxAdapter extends RecyclerView.Adapter<chatboxAdapter.ViewHolder> {
+    private List<Message> mData;
     private LayoutInflater mInflater;
 
+    private static final int USER_TEXT=1;
+    private static final int OTHER_TEXT=2;
+
     // data is passed into the constructor
-    chatlistAdapter(Context context, List<chatlist_component> data) {
+    chatboxAdapter(Context context, List<Message> data) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
     }
@@ -24,18 +27,22 @@ public class chatlistAdapter extends RecyclerView.Adapter<chatlistAdapter.ViewHo
     // inflates the row layout from xml when needed
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.chatlist_recycler, parent, false);
+        View view;
+        if(viewType==USER_TEXT) {
+            view = mInflater.inflate(R.layout.chatbox_user, parent, false);
+        }
+        else  {
+            view = mInflater.inflate(R.layout.chatbox_other, parent, false);
+        }
         return new ViewHolder(view);
     }
 
     // binds the data to the TextView in each row
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        chatlist_component animal = mData.get(position);
-        holder.chatName.setText(animal.getChatName());
-        holder.lastMessage.setText(animal.getLastMessage());
-        holder.lastMassageTime.setText(animal.getLastTextTime());
-        holder.userProfile.setImageResource(animal.getProfilePic());
+        Message animal = mData.get(position);
+        holder.lastMessage.setText(animal.getMessageContent());
+        holder.lastMessageTime.setText(animal.getMessageTime());
 
 
     }
@@ -46,20 +53,24 @@ public class chatlistAdapter extends RecyclerView.Adapter<chatlistAdapter.ViewHo
         return mData.size();
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        if(mData.get(position).isUser) return USER_TEXT;
+        else return OTHER_TEXT;
+    }
 
     // stores and recycles views as they are scrolled off screen
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView chatName;
+
         TextView lastMessage;
-        TextView lastMassageTime;
-        ImageView userProfile;
+        TextView lastMessageTime;
+
 
         ViewHolder(View itemView) {
             super(itemView);
-            chatName = itemView.findViewById(R.id.recycler_UserTitle);
-            lastMassageTime=itemView.findViewById(R.id.recycler_textTime);
-            lastMessage=itemView.findViewById(R.id.recycler_lastText);
-            userProfile=itemView.findViewById(R.id.other_profileImage);
+
+            lastMessageTime=itemView.findViewById(R.id.messageTime);
+            lastMessage=itemView.findViewById(R.id.messageContent);
 
             itemView.setOnClickListener(this);
         }
@@ -71,7 +82,7 @@ public class chatlistAdapter extends RecyclerView.Adapter<chatlistAdapter.ViewHo
     }
 
     // convenience method for getting data at click position
-    chatlist_component getItem(int id) {
+    Message getItem(int id) {
         return mData.get(id);
-}
+    }
 }

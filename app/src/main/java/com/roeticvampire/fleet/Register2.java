@@ -28,7 +28,7 @@ public class Register2 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register2);
         tap_to_change=findViewById(R.id.rand);
-        imageChooser=findViewById(R.id.recycler_imageView);
+        imageChooser=findViewById(R.id.other_profileImage);
         imageChooser.setMinimumHeight(imageChooser.getWidth());
         tap_to_change.setOnLongClickListener(new View.OnLongClickListener(){
 

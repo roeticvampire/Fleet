@@ -12,7 +12,7 @@
         android:layout_weight="1">
 
         <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/recycler_imageView"
+            android:id="@+id/other_profileImage"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:background="@drawable/input_border"

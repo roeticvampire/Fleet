@@ -30,7 +30,7 @@
                 android:layout_weight="1.5">
 
                 <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/recycler_imageView"
+                    android:id="@+id/other_profileImage"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:background="@drawable/input_border"
@@ -57,7 +57,7 @@
                 android:paddingHorizontal="10dp">
 
                 <TextView
-                    android:id="@+id/textView3"
+                    android:id="@+id/other_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/gotham_medium"
@@ -67,7 +67,7 @@
                     android:textSize="14sp" />
 
                 <TextView
-                    android:id="@+id/textView4"
+                    android:id="@+id/other_username"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/gotham_book"
