@@ -17,8 +17,8 @@
             android:layout_height="0dp"
             android:background="@drawable/input_border"
             android:cropToPadding="true"
-            android:paddingHorizontal="4dp"
-            android:paddingVertical="4dp"
+            android:paddingHorizontal="7dp"
+            android:paddingVertical="7dp"
             android:scaleType="fitXY"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintTop_toTopOf="parent"
@@ -51,7 +51,7 @@
             android:textColorHighlight="@color/light_blue"
             android:textColorHint="@color/light_blue"
             android:textColorLink="@color/light_blue"
-            android:textSize="24sp" />
+            android:textSize="16sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -78,7 +78,7 @@
                 android:textColorHighlight="@color/light_blue"
                 android:textColorHint="@color/light_blue"
                 android:textColorLink="@color/light_blue"
-                android:textSize="14sp" />
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/recycler_textTime"
@@ -93,7 +93,7 @@
                 android:textColorHighlight="@color/light_blue"
                 android:textColorHint="@color/light_blue"
                 android:textColorLink="@color/light_blue"
-                android:textSize="12sp" />
+                android:textSize="11sp" />
         </LinearLayout>
 
     </LinearLayout>

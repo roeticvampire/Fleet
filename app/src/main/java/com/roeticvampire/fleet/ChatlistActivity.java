@@ -1,6 +1,7 @@
 package com.roeticvampire.fleet;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,6 +20,12 @@ public class ChatlistActivity extends AppCompatActivity {
         animalNames.add(new chatlist_component("Spiderman", "jaal khatam ho raha... need help", R.drawable.default_profile_image, "11:39PM"));
         animalNames.add(new chatlist_component("Spiderman", "jaal khatam ho raha... need help", R.drawable.default_profile_image, "11:39PM"));
         animalNames.add(new chatlist_component("Spiderman", "jaal khatam ho raha... need help", R.drawable.default_profile_image, "11:39PM"));
+        animalNames.add(new chatlist_component("Spiderman", "jaal khatam ho raha... need help", R.drawable.default_profile_image, "11:39PM"));
+        animalNames.add(new chatlist_component("Spiderman", "jaal khatam ho raha... need help", R.drawable.default_profile_image, "11:39PM"));
+        animalNames.add(new chatlist_component("Spiderman", "jaal khatam ho raha... need help", R.drawable.default_profile_image, "11:39PM"));
+        animalNames.add(new chatlist_component("Spiderman", "jaal khatam ho raha... need help", R.drawable.default_profile_image, "11:39PM"));
+        animalNames.add(new chatlist_component("Spiderman", "jaal khatam ho raha... need help", R.drawable.default_profile_image, "11:39PM"));
+        animalNames.add(new chatlist_component("Spiderman", "jaal khatam ho raha... need help", R.drawable.default_profile_image, "11:39PM"));
 
 
         // set up the RecyclerView
@@ -26,6 +33,7 @@ public class ChatlistActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new chatlistAdapter(this, animalNames);
         recyclerView.setAdapter(adapter);
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
     }
 }
