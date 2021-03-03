@@ -26,6 +26,21 @@ chatboxAdapter adapter;
         animalNames.add(new Message(false,"Dhamaka Kardie ho ekdum kya hi bolen","11:29 AM"));
         animalNames.add(new Message(true,"Dhamaka Kardie ho ekdum kya hi bolen","11:29 AM"));
 
+
+        DBHelper dbHelper= new DBHelper(this);
+        dbHelper.insertUser("SYED","roet");
+        dbHelper.insertUser("SYD","roetron");
+        dbHelper.insertUser("SED","roetie");
+
+
+
+
+
+
+
+
+
+
         // set up the RecyclerView
         RecyclerView recyclerView = findViewById(R.id.ChatScreenRecycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
