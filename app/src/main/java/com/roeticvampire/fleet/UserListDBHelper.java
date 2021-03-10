@@ -13,7 +13,7 @@ import android.database.sqlite.SQLiteDatabase;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-public class DBHelper extends SQLiteOpenHelper {
+public class UserListDBHelper extends SQLiteOpenHelper {
 
     public static final String USERLIST_DATABASE_NAME="userlist.db";
     public static final String USERLIST_TABLE_NAME="userlist_table";
@@ -23,18 +23,19 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String USERLIST_CHAT_TABLE_NAME="chat_table_name";
     public static final String USERLIST_CHAT_TABLE_PREFIX="Fleet_";
 
+    /*
     public static final String CHATS_DATABASE_NAME="chatlist.db";
     public static final String CHATS_IS_USER="isUser";
     public static final String CHATS_MESSAGE= "message";
     public static final String CHATS_MESSAGE_TIME="messageTime";
-
+*/
     public static final int VERSION=1;
    /* Userlist.sql should have: Name/username/public_key/chat_tablename
 <each_chat>.sql should have: sent_or_recieved(boolean) /the message/ time
     */
 
 
-    public DBHelper(@Nullable Context context) {
+    public UserListDBHelper(@Nullable Context context) {
         super(context, USERLIST_DATABASE_NAME, null, VERSION);
 
     }
@@ -54,18 +55,37 @@ public class DBHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
     public boolean insertUser (String name, String username) {
+       Cursor cs=getUser(username);
+       if(cs.getCount()>0)  return false;
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(USERLIST_NAME, name);
         contentValues.put(USERLIST_USERNAME, username);
         contentValues.put(USERLIST_CHAT_TABLE_NAME, USERLIST_CHAT_TABLE_PREFIX+username);
-        db.insert(USERLIST_TABLE_NAME, null, contentValues);
+        long p=db.insert(USERLIST_TABLE_NAME, null, contentValues);
+        if(p!=-1)
         return true;
+        else return false;
     }
 
+    public boolean deleteUser (String username) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor= db.rawQuery("Select * from "+USERLIST_TABLE_NAME+" where "+USERLIST_USERNAME+" =?", new String[]{username});
+        long p=db.delete(USERLIST_TABLE_NAME,USERLIST_USERNAME+" =?",new String[]{username} );
+        if(p!=-1)
+            return true;
+        else return false;
+    }
 
+    public Cursor getAllUsers () {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor= db.rawQuery("Select * from "+USERLIST_TABLE_NAME, null);
+        return cursor;
+    }
+    public Cursor getUser (String username) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor= db.rawQuery("Select * from "+USERLIST_TABLE_NAME+" where "+USERLIST_USERNAME+" =?", new String[]{username});
+        return cursor;
+    }
 
-    //implement other methods too
-    //https://www.tutorialspoint.com/android/android_sqlite_database.htm
-    //we got the addition working, now to get the retrival and update/deletes working too (Maybe)
 }

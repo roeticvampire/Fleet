@@ -5,10 +5,12 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -22,15 +24,35 @@ chatboxAdapter adapter;
         setContentView(R.layout.activity_chat_screen);
 
         ArrayList<Message> animalNames = new ArrayList<>();
-        animalNames.add(new Message(true,"Dhamaka Kardie ho ekdum kya hi bolen","11:29 AM"));
-        animalNames.add(new Message(false,"Dhamaka Kardie ho ekdum kya hi bolen","11:29 AM"));
-        animalNames.add(new Message(true,"Dhamaka Kardie ho ekdum kya hi bolen","11:29 AM"));
+       // animalNames.add(new Message(true,"Dhamaka Kardie ho ekdum kya hi bolen","11:29 AM"));
+       // animalNames.add(new Message(false,"Dhamaka Kardie ho ekdum kya hi bolen","11:29 AM"));
+        //animalNames.add(new Message(true,"Dhamaka Kardie ho ekdum kya hi bolen","11:29 AM"));
 
 
-        DBHelper dbHelper= new DBHelper(this);
-        dbHelper.insertUser("SYED","roet");
-        dbHelper.insertUser("SYD","roetron");
-        dbHelper.insertUser("SED","roetie");
+        UserListDBHelper userListDbHelper = new UserListDBHelper(this);
+        //userListDbHelper.insertUser("SYED","roet");
+        //userListDbHelper.insertUser("SYD","roetron");
+        //userListDbHelper.insertUser("SED","roetie");
+
+ChatlistDBHelper chatlistDBHelper=new ChatlistDBHelper(this);
+        //chatlistDBHelper.addUser("roetess");
+        //chatlistDBHelper.insertMessage("roetess","But you will never be left behind...",true);
+       // chatlistDBHelper.insertMessage("roetess","Never a place to run in through my blood",false);
+        //chatlistDBHelper.insertMessage("roetess","But I can't escape.. it's still in my hand!!",false);
+
+        Cursor csr= chatlistDBHelper.getAllMessages("roetess");
+        if(csr.getCount()>0){
+            while(csr.moveToNext()){
+                boolean isUser= csr.getInt(1)==1?true:false;
+                String msg= csr.getString(2);
+                String timing= csr.getString(3);
+                animalNames.add(new Message(isUser,msg,timing));
+
+
+            }
+        }
+
+
 
 
 
@@ -54,10 +76,31 @@ chatboxAdapter adapter;
             public void onClick(View v) {
                if(sendText.getText().toString().length()>0) {
                     animalNames.add(new Message(true, sendText.getText().toString(), "now"));
+
+                    //will change this one later I guess
+                   chatlistDBHelper.insertMessage("roetess",sendText.getText().toString(),true);
+
                     recyclerView.getAdapter().notifyDataSetChanged();
                     recyclerView.scrollToPosition(animalNames.size() - 1);
                     sendText.setText("");
                 }
+
+
+            }
+
+
+            private void gettingAllUserDetails() {
+                Cursor csr=userListDbHelper.getAllUsers();
+                if(csr.getCount()>0){
+                    while(csr.moveToNext()){
+                        String str="";
+                        str+="\nID: "+csr.getInt(0);
+                        str+="\nNAME: "+csr.getString(1);
+                        str+="\nUSERNAME: "+csr.getString(2);
+                        str+="\nTABLE NAME: "+csr.getString(3);
+                    }
+                }
+
             }
         });
 

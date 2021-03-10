@@ -1,14 +1,15 @@
 package com.roeticvampire.fleet;
 
 import android.content.Context;
+import android.icu.text.RelativeDateTimeFormatter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 public class chatboxAdapter extends RecyclerView.Adapter<chatboxAdapter.ViewHolder> {
@@ -42,10 +43,14 @@ public class chatboxAdapter extends RecyclerView.Adapter<chatboxAdapter.ViewHold
     public void onBindViewHolder(ViewHolder holder, int position) {
         Message animal = mData.get(position);
         holder.lastMessage.setText(animal.getMessageContent());
-        holder.lastMessageTime.setText(animal.getMessageTime());
+        //String help= CustomTimeFormat("afhewif");
+
+        holder.lastMessageTime.setText(TimeLogic.CustomTimeFormat(animal.getMessageTime()));
 
 
     }
+
+
 
     // total number of rows
     @Override
