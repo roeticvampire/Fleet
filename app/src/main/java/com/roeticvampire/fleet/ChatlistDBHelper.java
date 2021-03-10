@@ -87,4 +87,9 @@ public class ChatlistDBHelper extends SQLiteOpenHelper {
     }
 
 
+    public Cursor getNewMessages(String tableName, int last_msg_id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor= db.rawQuery("Select * from "+tableName+" where _id >=?", new String[]{String.valueOf(last_msg_id)});
+        return cursor;
+    }
 }

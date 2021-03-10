@@ -85,6 +85,8 @@ public class UserListDBHelper extends SQLiteOpenHelper {
     public Cursor getUser (String username) {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor= db.rawQuery("Select * from "+USERLIST_TABLE_NAME+" where "+USERLIST_USERNAME+" =?", new String[]{username});
+
+
         return cursor;
     }
 

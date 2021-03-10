@@ -43,10 +43,7 @@ public class chatboxAdapter extends RecyclerView.Adapter<chatboxAdapter.ViewHold
     public void onBindViewHolder(ViewHolder holder, int position) {
         Message animal = mData.get(position);
         holder.lastMessage.setText(animal.getMessageContent());
-        //String help= CustomTimeFormat("afhewif");
-
         holder.lastMessageTime.setText(TimeLogic.CustomTimeFormat(animal.getMessageTime()));
-
 
     }
 
@@ -84,6 +81,7 @@ public class chatboxAdapter extends RecyclerView.Adapter<chatboxAdapter.ViewHold
         public void onClick(View view) {
 
         }
+
     }
 
     // convenience method for getting data at click position
