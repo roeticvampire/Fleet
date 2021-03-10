@@ -5,13 +5,21 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.material.imageview.ShapeableImageView;
 
 import java.util.ArrayList;
 
@@ -21,29 +29,30 @@ public class chatScreenActivity extends AppCompatActivity {
     Handler handler;
     EditText sendText;
     RecyclerView recyclerView;
+    ImageButton back_btn;
+    ImageView profileImage;
+    TextView nameView,usernameView;
 
+    String name="Syed";
+    String username="roetess";
     String tableName= "roetess";
+    Bitmap profileImageData;
+    @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_screen);
-
+ profileImageData= BitmapFactory.decodeResource(getResources(),
+                R.drawable.default_profile_image);
         ArrayList<Message> animalNames = new ArrayList<>();
-       // animalNames.add(new Message(true,"Dhamaka Kardie ho ekdum kya hi bolen","11:29 AM"));
-       // animalNames.add(new Message(false,"Dhamaka Kardie ho ekdum kya hi bolen","11:29 AM"));
-        //animalNames.add(new Message(true,"Dhamaka Kardie ho ekdum kya hi bolen","11:29 AM"));
 
 
         UserListDBHelper userListDbHelper = new UserListDBHelper(this);
         //userListDbHelper.insertUser("SYED","roet");
-        //userListDbHelper.insertUser("SYD","roetron");
-        //userListDbHelper.insertUser("SED","roetie");
 
 ChatlistDBHelper chatlistDBHelper=new ChatlistDBHelper(this);
         //chatlistDBHelper.addUser("roetess");
         //chatlistDBHelper.insertMessage("roetess","But you will never be left behind...",true);
-       // chatlistDBHelper.insertMessage("roetess","Never a place to run in through my blood",false);
-        //chatlistDBHelper.insertMessage("roetess","But I can't escape.. it's still in my hand!!",false);
 
         Cursor csr= chatlistDBHelper.getAllMessages(tableName);
         if(csr.getCount()>0){
@@ -63,7 +72,7 @@ ChatlistDBHelper chatlistDBHelper=new ChatlistDBHelper(this);
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Cursor csr=chatlistDBHelper.getNewMessages("roetess",animalNames.get(animalNames.size() - 1).msgId);
+                Cursor csr=chatlistDBHelper.getNewMessages(tableName,animalNames.get(animalNames.size() - 1).msgId);
                 if(csr.getCount()>0){
                     while(csr.moveToNext()){
                         int msgId=csr.getInt(0);
@@ -76,7 +85,7 @@ ChatlistDBHelper chatlistDBHelper=new ChatlistDBHelper(this);
                     recyclerView.scrollToPosition(animalNames.size() - 1);
                 }
 
-                handler.postDelayed(this,1000);
+                handler.postDelayed(this,4000);
             }
 
 
@@ -89,10 +98,19 @@ ChatlistDBHelper chatlistDBHelper=new ChatlistDBHelper(this);
         adapter = new chatboxAdapter(this, animalNames);
         recyclerView.setAdapter(adapter);
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+         recyclerView.scrollToPosition(animalNames.size() - 1);
 
-        recyclerView.scrollToPosition(animalNames.size() - 1);
+        back_btn=findViewById(R.id.back_btn);
+        profileImage=findViewById(R.id.other_profileImage);
+        usernameView=findViewById(R.id.other_username);
+        nameView=findViewById(R.id.other_name);
         sendText=findViewById(R.id.sendText_input);
         send_btn=findViewById(R.id.sendText_btn);
+
+        back_btn.setOnClickListener(v -> finishActivity(12345));
+        profileImage.setImageBitmap(profileImageData);
+        usernameView.setText("@"+username);
+        nameView.setText(name);
         send_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

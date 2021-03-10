@@ -12,11 +12,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Fleet">
-        <activity android:name=".ChatlistActivity"></activity>
+        <activity android:name=".chatScreenActivity"></activity>
         <activity android:name=".Register2" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".RegisterActivity" />
-        <activity android:name=".chatScreenActivity">
+        <activity android:name=".ChatlistActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

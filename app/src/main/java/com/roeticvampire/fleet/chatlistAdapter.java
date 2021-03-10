@@ -1,6 +1,7 @@
 package com.roeticvampire.fleet;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,7 +67,6 @@ public class chatlistAdapter extends RecyclerView.Adapter<chatlistAdapter.ViewHo
 
         @Override
         public void onClick(View view) {
-
         }
     }
 

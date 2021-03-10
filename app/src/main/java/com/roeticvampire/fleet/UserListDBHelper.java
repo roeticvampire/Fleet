@@ -23,12 +23,6 @@ public class UserListDBHelper extends SQLiteOpenHelper {
     public static final String USERLIST_CHAT_TABLE_NAME="chat_table_name";
     public static final String USERLIST_CHAT_TABLE_PREFIX="Fleet_";
 
-    /*
-    public static final String CHATS_DATABASE_NAME="chatlist.db";
-    public static final String CHATS_IS_USER="isUser";
-    public static final String CHATS_MESSAGE= "message";
-    public static final String CHATS_MESSAGE_TIME="messageTime";
-*/
     public static final int VERSION=1;
    /* Userlist.sql should have: Name/username/public_key/chat_tablename
 <each_chat>.sql should have: sent_or_recieved(boolean) /the message/ time
