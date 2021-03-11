@@ -21,19 +21,16 @@ public class ChatlistActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chatlist);
 
-        ArrayList<chatlist_component> animalNames = new ArrayList<>();
-       //animalNames.add(new chatlist_component("Spiderman", "jaal khatam ho raha... need help", R.drawable.default_profile_image, "11:39PM"));
-        //animalNames.add(new chatlist_component("Spiderman", "jaal khatam ho raha... need help", R.drawable.default_profile_image, "11:39PM"));
-        //animalNames.add(new chatlist_component("Spiderman", "jaal khatam ho raha... need help", R.drawable.default_profile_image, "11:39PM"));
-UserListDBHelper userListDBHelper=new UserListDBHelper(this);
-//userListDBHelper.insertUser("Syed","roetess");
-Cursor csr=userListDBHelper.getAllUsers();
+        ArrayList<chatlist_component> chatListMembers = new ArrayList<>();
+
+        //retrieiving all user details
+        UserListDBHelper userListDBHelper=new UserListDBHelper(this);
+        Cursor csr=userListDBHelper.getAllUsers();
         if(csr.getCount()>0){
             while(csr.moveToNext()){
                 String name= csr.getString(1);
-                String timing= csr.getString(2);
-                animalNames.add(new chatlist_component(name,"nothing",R.drawable.default_profile_image,"zindagi"));
-
+                String username= csr.getString(2);
+                chatListMembers.add(new chatlist_component(name,username,"Ye aakhiri likha hai jo",R.drawable.floating_btn,"Yesterday"));
 
             }
         }
@@ -41,12 +38,9 @@ Cursor csr=userListDBHelper.getAllUsers();
         // set up the RecyclerView
         RecyclerView recyclerView = findViewById(R.id.chatlist_recyclerview);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new chatlistAdapter(this, animalNames);
+        adapter = new chatlistAdapter(this, chatListMembers);
         recyclerView.setAdapter(adapter);
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-
-
-
 
 
     }

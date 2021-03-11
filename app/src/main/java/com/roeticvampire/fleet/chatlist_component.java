@@ -5,12 +5,22 @@ public class chatlist_component {
     private String lastMessage;
     private int profilePic;
     private String lastTextTime;
+    private String chatUsername;
+    public String getChatUsername() {
+        return chatUsername;
+    }
 
-    public chatlist_component(String chatName, String lastMessage, int profilePic, String lastTextTime) {
+    public void setChatUsername(String chatUsername) {
+        this.chatUsername = chatUsername;
+    }
+
+
+    public chatlist_component(String chatName, String chatUsername,String lastMessage, int profilePic, String lastTextTime) {
         this.chatName = chatName;
         this.lastMessage = lastMessage;
         this.profilePic = profilePic;
         this.lastTextTime = lastTextTime;
+        this.chatUsername=chatUsername;
     }
 
     public String getChatName() {
