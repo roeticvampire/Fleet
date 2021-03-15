@@ -31,7 +31,7 @@ public class LoginActivity extends AppCompatActivity {
 
         user_email_input =findViewById(R.id.input_email);
         user_password_input =findViewById(R.id.login_password);
-        login_btn=findViewById(R.id.login_login_btn);
+        login_btn=findViewById(R.id.Continue_btn);
         login_btn.setOnClickListener(v -> {
             //
             String email_id= user_email_input.getText().toString();
@@ -53,10 +53,6 @@ public class LoginActivity extends AppCompatActivity {
                 });
             }
         });
-
-
-
-
 
 
     }

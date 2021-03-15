@@ -126,7 +126,7 @@
 
 
     <ImageButton
-        android:id="@+id/login_login_btn"
+        android:id="@+id/Continue_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#00FFFFFF"

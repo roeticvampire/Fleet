@@ -15,8 +15,8 @@
         <activity android:name=".chatScreenActivity"></activity>
         <activity android:name=".Register2" />
         <activity android:name=".ChatlistActivity" />
-        <activity android:name=".RegisterActivity" />
-        <activity android:name=".LoginActivity">
+        <activity android:name=".LoginActivity" />
+        <activity android:name=".RegisterActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

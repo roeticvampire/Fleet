@@ -15,7 +15,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingHorizontal="14dp"
-        android:paddingVertical="24dp"
+        android:paddingVertical="14dp"
+        android:scaleX="0.6"
+        android:scaleY="0.6"
         app:srcCompat="@drawable/logotype_intro" />
 
     <LinearLayout
@@ -90,7 +92,7 @@
             android:fontFamily="@font/gotham_book"
             android:imeActionLabel="@string/app_name"
             android:includeFontPadding="true"
-            android:inputType="textPersonName"
+            android:inputType="textWebEmailAddress|textEmailAddress"
             android:paddingHorizontal="8sp"
             android:paddingVertical="12sp"
             android:paddingLeft="12sp"
@@ -172,7 +174,7 @@
             android:fontFamily="@font/gotham_book"
             android:imeActionLabel="@string/app_name"
             android:includeFontPadding="true"
-            android:inputType="textPersonName"
+            android:inputType="textPassword"
             android:paddingHorizontal="8sp"
             android:paddingVertical="12sp"
             android:paddingLeft="12sp"
@@ -214,7 +216,7 @@
             android:fontFamily="@font/gotham_book"
             android:imeActionLabel="@string/app_name"
             android:includeFontPadding="true"
-            android:inputType="textPersonName"
+            android:inputType="textPassword"
             android:paddingHorizontal="8sp"
             android:paddingVertical="12sp"
             android:paddingLeft="12sp"
