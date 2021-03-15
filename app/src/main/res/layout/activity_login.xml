@@ -72,7 +72,7 @@
             android:fontFamily="@font/gotham_book"
             android:imeActionLabel="@string/app_name"
             android:includeFontPadding="true"
-            android:inputType="textPersonName"
+            android:inputType="textWebEmailAddress|textEmailAddress"
             android:paddingHorizontal="8sp"
             android:paddingVertical="12sp"
             android:paddingLeft="12sp"
