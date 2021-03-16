@@ -62,8 +62,7 @@ public class RegisterActivity extends AppCompatActivity {
             if(verifyCredentials())
                 createUser();
         });
-        if(verifyCredentials())
-        createUser();
+
 
 
     }

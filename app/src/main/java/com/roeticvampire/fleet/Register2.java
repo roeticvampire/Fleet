@@ -1,11 +1,13 @@
 package com.roeticvampire.fleet;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
@@ -14,10 +16,17 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.theartofdev.edmodo.cropper.CropImage;
+
+import java.io.ByteArrayOutputStream;
 
 public class Register2 extends AppCompatActivity {
 
@@ -38,7 +47,7 @@ public class Register2 extends AppCompatActivity {
 
         setContentView(R.layout.activity_register2);
         tap_to_change=findViewById(R.id.rand);
-        imageChooser=findViewById(R.id.other_profileImage);
+        imageChooser=findViewById(R.id.profileImage);
         imageChooser.setMinimumHeight(imageChooser.getWidth());
         tap_to_change.setOnLongClickListener(new View.OnLongClickListener(){
 
@@ -50,6 +59,14 @@ public class Register2 extends AppCompatActivity {
         });
 
         imageChooser.setImageResource(R.drawable.default_profile_image);
+        FirebaseStorage storager=FirebaseStorage.getInstance();
+        StorageReference wre=storager.getReferenceFromUrl("gs://fleet-82df7.appspot.com/images/berserk.jpg");
+
+        Glide.with(Register2.this)
+                .load(wre).dontAnimate()
+                .into(imageChooser);
+
+
         imageChooser.setOnClickListener(v -> {
             if(Build.VERSION.SDK_INT>+Build.VERSION_CODES.M){
                 if(checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)== PackageManager.PERMISSION_DENIED){
@@ -67,9 +84,48 @@ public class Register2 extends AppCompatActivity {
 
 register_btn=findViewById(R.id.Continue_btn);
         register_btn.setOnClickListener(v->{
-            FirebaseDatabase database = FirebaseDatabase.getInstance();
-            DatabaseReference myRef = database.getReference("Users");
-            myRef.child(username).setValue(new User(name,username,email_id,((BitmapDrawable) imageChooser.getDrawable()).getBitmap()));
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            Bitmap bitmap = ((BitmapDrawable) imageChooser.getDrawable()).getBitmap();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            byte[] data = baos.toByteArray();
+
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+            StorageReference storageRef = storage.getReference();
+            StorageReference imagesRef = storageRef.child("images/"+username+".jpg");
+
+            UploadTask uploadTask = imagesRef.putBytes(data);
+            uploadTask.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    // Handle unsuccessful uploads
+                }
+            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+
+                    FirebaseDatabase database = FirebaseDatabase.getInstance();
+                    DatabaseReference myRef = database.getReference("Users");
+                    myRef.child(username).setValue(new User(name,username,email_id,taskSnapshot.getMetadata().getPath()));
+                    // Do what you want
+
+                    StorageReference pathReference = storageRef.child("gs://fleet-82df7.appspot.com/images/"+username+".jpg");
+                    StorageReference wre=storage.getReferenceFromUrl("gs://fleet-82df7.appspot.com/images/berserk.jpg");
+                    wre.getDownloadUrl();
+                    Glide.with(Register2.this)
+                            .load(wre).dontAnimate()
+                            .into(imageChooser);
+
+
+                    Intent intent= new Intent (Register2.this,ChatlistActivity.class);
+
+
+                }
+            });
+
+
+
+
         });
 
     }

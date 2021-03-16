@@ -1,15 +1,16 @@
 package com.roeticvampire.fleet;
 
 import android.graphics.Bitmap;
+import android.net.Uri;
 
 public class User {
     String name;
     String username;
     String email_id;
     //Object public_key;
-    Bitmap profilePic;
+    String profilePic;
 
-    public User(String name, String username, String email_id, Bitmap profilePic) {
+    public User(String name, String username, String email_id, String profilePic) {
         this.name = name;
         this.username = username;
         this.email_id = email_id;
@@ -40,11 +41,11 @@ public class User {
         this.email_id = email_id;
     }
 
-    public Bitmap getProfilePic() {
+    public String getProfilePic() {
         return profilePic;
     }
 
-    public void setProfilePic(Bitmap profilePic) {
+    public void setProfilePic(String profilePic) {
         this.profilePic = profilePic;
     }
 }

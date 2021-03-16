@@ -10,11 +10,16 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import java.util.ArrayList;
 
 public class ChatlistActivity extends AppCompatActivity {
     chatlistAdapter adapter;
+    ImageView User_profile_image;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

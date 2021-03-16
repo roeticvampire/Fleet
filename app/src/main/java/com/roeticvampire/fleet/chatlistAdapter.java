@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -75,7 +74,7 @@ public class chatlistAdapter extends RecyclerView.Adapter<chatlistAdapter.ViewHo
             chatName = itemView.findViewById(R.id.recycler_UserTitle);
             lastMassageTime=itemView.findViewById(R.id.recycler_textTime);
             lastMessage=itemView.findViewById(R.id.recycler_lastText);
-            userProfile=itemView.findViewById(R.id.other_profileImage);
+            userProfile=itemView.findViewById(R.id.profileImage);
             linearLayout=itemView.findViewById(R.id.linLayout);
             itemView.setOnClickListener(this);
         }

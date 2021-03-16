@@ -37,7 +37,7 @@
         android:paddingVertical="18dip">
 
         <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/other_profileImage"
+            android:id="@+id/profileImage"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:background="@drawable/input_border"
@@ -46,7 +46,7 @@
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintTop_toTopOf="parent"
             app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
-            app:srcCompat="@drawable/default_profile_image"
+
             app:strokeColor="#FFFFFF"
             app:strokeWidth="2dp"
             tools:layout_editor_absoluteX="30dp" />

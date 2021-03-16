@@ -96,9 +96,9 @@ public class chatScreenActivity extends AppCompatActivity {
          recyclerView.scrollToPosition(messageArrayList.size() - 1);
 
         back_btn=findViewById(R.id.back_btn);
-        profileImage=findViewById(R.id.other_profileImage);
-        usernameView=findViewById(R.id.other_username);
-        nameView=findViewById(R.id.other_name);
+        profileImage=findViewById(R.id.profileImage);
+        usernameView=findViewById(R.id.user_username);
+        nameView=findViewById(R.id.user_name);
         sendText=findViewById(R.id.username_input);
         send_btn=findViewById(R.id.sendText_btn);
 
