@@ -5,13 +5,16 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -66,15 +69,6 @@ public class Register2 extends AppCompatActivity {
 
         imageChooser.setImageResource(R.drawable.default_profile_image);
 
-        FirebaseStorage storager=FirebaseStorage.getInstance();
-       StorageReference pathReference=storager.getReference("images/"+username+".jpg");
-
-                    Glide.with(Register2.this)
-                            .load(pathReference).dontAnimate()
-                            .into(imageChooser);
-
-        ;
-
 
         imageChooser.setOnClickListener(v -> {
             if(Build.VERSION.SDK_INT>+Build.VERSION_CODES.M){
@@ -118,22 +112,37 @@ register_btn=findViewById(R.id.Continue_btn);
                     myRef.child(username).setValue(new User(name,username,email_id));
                     // Do what you want
 
+                    /*
                     StorageReference pathReference=storage.getReference("images/"+username+".jpg");
 
                     Glide.with(Register2.this)
                             .load(pathReference).dontAnimate()
                             .into(imageChooser);
-
-
+*/
+                    SharedPreferences sharedpreferences = getSharedPreferences("personal_details", Context.MODE_PRIVATE);
                     Intent intent= new Intent (Register2.this,ChatlistActivity.class);
-                    intent.putExtra("name",name);
-                    intent.putExtra("username",username);
-                    intent.putExtra("email_id",email_id);
-                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    Bitmap bmp= ((BitmapDrawable) imageChooser.getDrawable()).getBitmap();
-                    bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                    byte[] byteArray = stream.toByteArray();
-                    intent.putExtra("image",byteArray);
+                    SharedPreferences.Editor editor = sharedpreferences.edit();
+
+                    editor.putString("name", name);
+                    editor.putString("username", username);
+                    editor.putString("email_id", email_id);
+
+                    String encodedImage = Base64.encodeToString(data, Base64.DEFAULT);
+                    editor.putString("image_data",encodedImage);
+                    editor.commit();
+                    //for now we'll just add the user here anyway
+                    //___________________________________________________________________________________________________________
+                        UserListDBHelper userListDBHelper=new UserListDBHelper(Register2.this);
+                        userListDBHelper.insertUser(name,username,data);
+                        ChatlistDBHelper chatlistDBHelper=new ChatlistDBHelper(Register2.this);
+                        chatlistDBHelper.addUser("Fleet_"+username);
+                        //chatlistDBHelper.insertMessage("Fleet_"+username,"Well, technically it's all one person",false);
+
+
+
+
+                    //___________________________________________________________________________________________________________
+                    //fine the territory for mayhem is marked
                     startActivity(intent);
                 }
             });

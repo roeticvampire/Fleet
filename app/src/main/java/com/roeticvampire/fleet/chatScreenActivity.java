@@ -9,6 +9,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -43,7 +44,7 @@ public class chatScreenActivity extends AppCompatActivity {
         Intent intent=getIntent();
         name= intent.getStringExtra("name");
         username= intent.getStringExtra("username");
-        profileImageData=(Bitmap) intent.getParcelableExtra("profileImage");
+        profileImageData= BitmapFactory.decodeByteArray(intent.getByteArrayExtra("profileImage"), 0, intent.getByteArrayExtra("profileImage").length);
         tableName="Fleet_"+username;
         UserListDBHelper userListDbHelper = new UserListDBHelper(this);
 

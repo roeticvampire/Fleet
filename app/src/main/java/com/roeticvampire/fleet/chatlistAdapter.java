@@ -38,8 +38,8 @@ public class chatlistAdapter extends RecyclerView.Adapter<chatlistAdapter.ViewHo
         chatlist_component animal = mData.get(position);
         holder.chatName.setText(animal.getChatName());
         holder.lastMessage.setText(animal.getLastMessage());
-        holder.lastMassageTime.setText(animal.getLastTextTime());
-        holder.userProfile.setImageResource(animal.getProfilePic());
+        holder.lastMassageTime.setText(TimeLogic.CustomTimeFormat(animal.getLastTextTime()));
+        holder.userProfile.setImageBitmap(BitmapFactory.decodeByteArray(animal.getProfilePic(), 0, animal.getProfilePic().length));
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -47,8 +47,7 @@ public class chatlistAdapter extends RecyclerView.Adapter<chatlistAdapter.ViewHo
                 intent.putExtra("username",mData.get(position).getChatUsername());
                 intent.putExtra("name",mData.get(position).getChatName());
 
-                intent.putExtra("profileImage",BitmapFactory.decodeResource(context.getResources(),
-                        mData.get(position).getProfilePic()));
+                intent.putExtra("profileImage",mData.get(position).getProfilePic());
                 context.startActivity(intent);
             }
         });

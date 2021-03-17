@@ -1,9 +1,11 @@
 package com.roeticvampire.fleet;
 
+import java.util.BitSet;
+
 public class chatlist_component {
     private String chatName;
     private String lastMessage;
-    private int profilePic;
+    private byte[] profilePic;
     private String lastTextTime;
     private String chatUsername;
     public String getChatUsername() {
@@ -15,7 +17,7 @@ public class chatlist_component {
     }
 
 
-    public chatlist_component(String chatName, String chatUsername,String lastMessage, int profilePic, String lastTextTime) {
+    public chatlist_component(String chatName, String chatUsername,String lastMessage, byte[] profilePic, String lastTextTime) {
         this.chatName = chatName;
         this.lastMessage = lastMessage;
         this.profilePic = profilePic;
@@ -39,11 +41,11 @@ public class chatlist_component {
         this.lastMessage = lastMessage;
     }
 
-    public int getProfilePic() {
+    public byte[] getProfilePic() {
         return profilePic;
     }
 
-    public void setProfilePic(int profilePic) {
+    public void setProfilePic(byte[] profilePic) {
         this.profilePic = profilePic;
     }
 

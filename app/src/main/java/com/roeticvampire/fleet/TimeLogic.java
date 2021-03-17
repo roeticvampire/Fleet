@@ -4,10 +4,15 @@ import java.sql.Timestamp;
 
 public class TimeLogic {
     public static String CustomTimeFormat(String dateTime) {
-        String currentTime= String.valueOf(new Timestamp(System.currentTimeMillis()));
-        if(!getYear(currentTime).equals(getYear(dateTime))) return getYear(dateTime);
-        if(!getDate(currentTime).equals(getDate(dateTime))) return getDate(dateTime);
-        return getTime(dateTime);
+        try{
+            String currentTime = String.valueOf(new Timestamp(System.currentTimeMillis()));
+            if (!getYear(currentTime).equals(getYear(dateTime))) return getYear(dateTime);
+            if (!getDate(currentTime).equals(getDate(dateTime))) return getDate(dateTime);
+            return getTime(dateTime);
+        }
+        catch (Exception e){
+            return "";
+        }
 
     }
     private static String getYear(String dateTime){
