@@ -16,7 +16,12 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
@@ -27,6 +32,7 @@ import com.google.firebase.storage.UploadTask;
 import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.io.ByteArrayOutputStream;
+import java.lang.annotation.Target;
 
 public class Register2 extends AppCompatActivity {
 
@@ -59,12 +65,15 @@ public class Register2 extends AppCompatActivity {
         });
 
         imageChooser.setImageResource(R.drawable.default_profile_image);
-        FirebaseStorage storager=FirebaseStorage.getInstance();
-        StorageReference wre=storager.getReferenceFromUrl("gs://fleet-82df7.appspot.com/images/berserk.jpg");
 
-        Glide.with(Register2.this)
-                .load(wre).dontAnimate()
-                .into(imageChooser);
+        FirebaseStorage storager=FirebaseStorage.getInstance();
+       StorageReference pathReference=storager.getReference("images/"+username+".jpg");
+
+                    Glide.with(Register2.this)
+                            .load(pathReference).dontAnimate()
+                            .into(imageChooser);
+
+        ;
 
 
         imageChooser.setOnClickListener(v -> {
@@ -97,7 +106,7 @@ register_btn=findViewById(R.id.Continue_btn);
             uploadTask.addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception exception) {
-                    // Handle unsuccessful uploads
+                    Toast.makeText(Register2.this, "Oops, something's fishy!\nWanna try again?", Toast.LENGTH_SHORT).show();
                 }
             }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
@@ -106,20 +115,26 @@ register_btn=findViewById(R.id.Continue_btn);
 
                     FirebaseDatabase database = FirebaseDatabase.getInstance();
                     DatabaseReference myRef = database.getReference("Users");
-                    myRef.child(username).setValue(new User(name,username,email_id,taskSnapshot.getMetadata().getPath()));
+                    myRef.child(username).setValue(new User(name,username,email_id));
                     // Do what you want
 
-                    StorageReference pathReference = storageRef.child("gs://fleet-82df7.appspot.com/images/"+username+".jpg");
-                    StorageReference wre=storage.getReferenceFromUrl("gs://fleet-82df7.appspot.com/images/berserk.jpg");
-                    wre.getDownloadUrl();
+                    StorageReference pathReference=storage.getReference("images/"+username+".jpg");
+
                     Glide.with(Register2.this)
-                            .load(wre).dontAnimate()
+                            .load(pathReference).dontAnimate()
                             .into(imageChooser);
 
 
                     Intent intent= new Intent (Register2.this,ChatlistActivity.class);
-
-
+                    intent.putExtra("name",name);
+                    intent.putExtra("username",username);
+                    intent.putExtra("email_id",email_id);
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    Bitmap bmp= ((BitmapDrawable) imageChooser.getDrawable()).getBitmap();
+                    bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                    byte[] byteArray = stream.toByteArray();
+                    intent.putExtra("image",byteArray);
+                    startActivity(intent);
                 }
             });
 

@@ -5,7 +5,10 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -17,7 +20,7 @@ import java.util.ArrayList;
 public class ChatlistActivity extends AppCompatActivity {
     chatlistAdapter adapter;
     ImageView User_profile_image;
-
+    String name,username,email_id;
 
 
 
@@ -25,9 +28,14 @@ public class ChatlistActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chatlist);
-
+        name=getIntent().getStringExtra("name");
+        username=getIntent().getStringExtra("username");
+        email_id=getIntent().getStringExtra("email_id");
+        byte[] byteArray = getIntent().getByteArrayExtra("image");
         ArrayList<chatlist_component> chatListMembers = new ArrayList<>();
 
+        User_profile_image=findViewById(R.id.profileImage);
+        User_profile_image.setImageBitmap(BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length));
         //retrieiving all user details
         UserListDBHelper userListDBHelper=new UserListDBHelper(this);
         Cursor csr=userListDBHelper.getAllUsers();

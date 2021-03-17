@@ -48,8 +48,9 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot user: snapshot.getChildren()){
-                usernames.add(user.toString());
+                usernames.add(user.getKey());
                 }
+                Toast.makeText(RegisterActivity.this, "Please fill all the columns!", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -105,6 +106,7 @@ public class RegisterActivity extends AppCompatActivity {
             intent.putExtra("name",name_input.getText().toString());
             intent.putExtra("username",username_input.getText().toString());
             intent.putExtra("email_id",email_input.getText().toString());
+
             startActivity(intent);
         }
     });

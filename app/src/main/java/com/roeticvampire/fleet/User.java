@@ -8,13 +8,12 @@ public class User {
     String username;
     String email_id;
     //Object public_key;
-    String profilePic;
 
-    public User(String name, String username, String email_id, String profilePic) {
+
+    public User(String name, String username, String email_id) {
         this.name = name;
         this.username = username;
         this.email_id = email_id;
-        this.profilePic = profilePic;
     }
 
     public String getName() {
@@ -41,11 +40,4 @@ public class User {
         this.email_id = email_id;
     }
 
-    public String getProfilePic() {
-        return profilePic;
-    }
-
-    public void setProfilePic(String profilePic) {
-        this.profilePic = profilePic;
-    }
 }
