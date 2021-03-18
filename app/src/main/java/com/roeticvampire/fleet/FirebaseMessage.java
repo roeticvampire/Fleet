@@ -3,6 +3,9 @@ public class FirebaseMessage {
 String username;
 String message;
 
+    public FirebaseMessage() {
+    }
+
     public FirebaseMessage(String username, String message) {
         this.username = username;
         this.message = message;

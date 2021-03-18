@@ -100,7 +100,8 @@ public class UserListDBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor= db.rawQuery("Select * from "+USERLIST_TABLE_NAME+" where "+USERLIST_USERNAME+" =?", new String[]{username});
         ContentValues contentValues = new ContentValues();
-
+        if(cursor==null)return false;
+        cursor.moveToFirst();
         contentValues.put(USERLIST_NAME, cursor.getString(1));
         contentValues.put(USERLIST_USERNAME, username);
         contentValues.put(USERLIST_CHAT_TABLE_NAME, USERLIST_CHAT_TABLE_PREFIX+username);

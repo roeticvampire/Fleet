@@ -18,6 +18,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
 
 public class chatScreenActivity extends AppCompatActivity {
@@ -33,6 +36,7 @@ public class chatScreenActivity extends AppCompatActivity {
     String username;
     String tableName;
     Bitmap profileImageData;
+    DatabaseReference myRef;
     @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,11 +45,13 @@ public class chatScreenActivity extends AppCompatActivity {
 
         ArrayList<Message> messageArrayList = new ArrayList<>();
 
+
         Intent intent=getIntent();
         name= intent.getStringExtra("name");
         username= intent.getStringExtra("username");
         profileImageData= BitmapFactory.decodeByteArray(intent.getByteArrayExtra("profileImage"), 0, intent.getByteArrayExtra("profileImage").length);
         tableName="Fleet_"+username;
+        myRef =  FirebaseDatabase.getInstance().getReference("messages").child(username);
         UserListDBHelper userListDbHelper = new UserListDBHelper(this);
 
         ChatlistDBHelper chatlistDBHelper=new ChatlistDBHelper(this);
@@ -112,6 +118,13 @@ public class chatScreenActivity extends AppCompatActivity {
             public void onClick(View v) {
                if(sendText.getText().toString().length()>0) {
                     //messageArrayList.add(new Message(true, sendText.getText().toString(), "now"));
+
+                   //here'we're sending the msgs, to ourselves right now coz yay
+                   myRef.push().setValue(new FirebaseMessage(username,sendText.getText().toString()));
+
+
+
+
 
                     //will change this one later I guess
                    chatlistDBHelper.insertMessage(tableName,sendText.getText().toString(),true);

@@ -11,6 +11,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.sql.SQLException;
+
 public class CustomApplication extends Application {
     ChatlistDBHelper chatlistDBHelper;
     UserListDBHelper userListDBHelper;
@@ -42,8 +44,17 @@ public class CustomApplication extends Application {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 FirebaseMessage fb = snapshot.getValue(FirebaseMessage.class);
+
                 //process it into a msg, then delete this shit
-                chatlistDBHelper.insertMessage("Fleet_"+username,fb.getMessage(),false);
+                try{
+                    chatlistDBHelper.insertMessage("Fleet_" + fb.getUsername(), fb.getMessage(), false);
+                }catch(Exception e){
+                    chatlistDBHelper.addUser("Fleet_" + fb.getUsername());
+                    chatlistDBHelper.insertMessage("Fleet_" + fb.getUsername(), fb.getMessage(), false);
+                }
+            userListDBHelper.updateLastText(fb.getUsername(),fb.getMessage());
+                myRef.child(snapshot.getKey()).removeValue();
+
 
             }
 

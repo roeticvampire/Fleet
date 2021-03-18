@@ -9,6 +9,8 @@ import android.os.Handler;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class SplashScreen extends AppCompatActivity {
 
@@ -17,6 +19,14 @@ public class SplashScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.screen_splash);
         FirebaseUser user=FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("messages").child("roetie");
+
+
+
+
+
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -36,5 +46,7 @@ public class SplashScreen extends AppCompatActivity {
                 //the current activity will get finished.
             }
         }, 3000);
+
+
     }
 }
