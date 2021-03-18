@@ -24,7 +24,7 @@
         android:layout_marginTop="55dp"
         android:fontFamily="@font/gotham_light"
         android:paddingHorizontal="16dp"
-        android:text="Hey There"
+        android:text="Welcome back"
         android:textColor="@color/light_blue"
         android:textSize="24sp" />
 
@@ -46,7 +46,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="0"
         android:orientation="vertical"
-        android:paddingVertical="32sp">
+        android:paddingVertical="16sp">
 
         <TextView
             android:id="@+id/label_email"
@@ -130,6 +130,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#00FFFFFF"
-        android:paddingVertical="30sp"
+        android:paddingTop="30sp"
         android:src="@drawable/login_btn" />
+
+    <TextView
+        android:id="@+id/forgot_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/gotham_light"
+        android:text="Forgot Password?"
+        android:textAlignment="center"
+        android:textColor="@color/light_blue"
+        android:textSize="20sp" />
 </LinearLayout>

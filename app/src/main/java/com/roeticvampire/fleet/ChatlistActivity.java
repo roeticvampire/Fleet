@@ -40,6 +40,7 @@ public class ChatlistActivity extends AppCompatActivity {
 
         name=sharedpreferences.getString("name","");
         username=sharedpreferences.getString("username","");
+        ((CustomApplication)ChatlistActivity.this.getApplication()).setUsername(username);
         email_id=sharedpreferences.getString("email_id","");
         String previouslyEncodedImage = sharedpreferences.getString("image_data", "");
         User_profile_image=findViewById(R.id.profileImage);
