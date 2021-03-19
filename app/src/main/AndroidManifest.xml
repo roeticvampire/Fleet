@@ -13,7 +13,8 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.Fleet">
-        <activity android:name=".welcome2Activity"></activity>
+        <activity android:name=".AddNewUserActivity" />
+        <activity android:name=".welcome2Activity" />
         <activity android:name=".chatScreenActivity" />
         <activity android:name=".Register2" />
         <activity android:name=".ChatlistActivity" />

@@ -60,8 +60,9 @@ public class ChatlistActivity extends AppCompatActivity {
         username_view=findViewById(R.id.user_username);
         floatingActionButton=findViewById(R.id.floatingActionButton);
         floatingActionButton.setOnClickListener(v->{
-            FirebaseAuth fb=FirebaseAuth.getInstance();
-            fb.signOut();
+            startActivity(new Intent(getApplicationContext(),AddNewUserActivity.class));
+
+
         });
         name_view.setText(name);
         username_view.setText(username);

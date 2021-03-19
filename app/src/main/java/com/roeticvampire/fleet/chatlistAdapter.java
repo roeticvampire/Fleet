@@ -2,7 +2,9 @@ package com.roeticvampire.fleet;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,7 +49,12 @@ public class chatlistAdapter extends RecyclerView.Adapter<chatlistAdapter.ViewHo
                 intent.putExtra("username",mData.get(position).getChatUsername());
                 intent.putExtra("name",mData.get(position).getChatName());
 
-                intent.putExtra("profileImage",mData.get(position).getProfilePic());
+
+                SharedPreferences sharedpreferences = context.getSharedPreferences("frined_profile_data", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedpreferences.edit();
+                String encodedImage = Base64.encodeToString(mData.get(position).getProfilePic(), Base64.DEFAULT);
+                editor.putString("image_data",encodedImage);
+                editor.commit();
                 context.startActivity(intent);
             }
         });

@@ -6,12 +6,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Base64;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -49,7 +52,17 @@ public class chatScreenActivity extends AppCompatActivity {
         Intent intent=getIntent();
         name= intent.getStringExtra("name");
         username= intent.getStringExtra("username");
-        profileImageData= BitmapFactory.decodeByteArray(intent.getByteArrayExtra("profileImage"), 0, intent.getByteArrayExtra("profileImage").length);
+
+        SharedPreferences sharedpreferences = getSharedPreferences("frined_profile_data", Context.MODE_PRIVATE);
+        String previouslyEncodedImage=sharedpreferences.getString("image_data", "");
+
+        if( !previouslyEncodedImage.equalsIgnoreCase("") ){
+            byte[] b = Base64.decode(previouslyEncodedImage, Base64.DEFAULT);
+            profileImageData = BitmapFactory.decodeByteArray(b, 0, b.length);
+
+        }
+
+        //profileImageData= BitmapFactory.decodeByteArray(intent.getByteArrayExtra("profileImage"), 0, intent.getByteArrayExtra("profileImage").length);
         tableName="Fleet_"+username;
         myRef =  FirebaseDatabase.getInstance().getReference("messages").child(username);
         UserListDBHelper userListDbHelper = new UserListDBHelper(this);
@@ -128,6 +141,7 @@ public class chatScreenActivity extends AppCompatActivity {
 
                     //will change this one later I guess
                    chatlistDBHelper.insertMessage(tableName,sendText.getText().toString(),true);
+                   userListDbHelper.updateLastText(username,sendText.getText().toString());
                     updateChats();
                     recyclerView.getAdapter().notifyDataSetChanged();
                     recyclerView.scrollToPosition(messageArrayList.size() - 1);
@@ -178,5 +192,11 @@ public class chatScreenActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         handler.removeCallbacksAndMessages(null);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 }

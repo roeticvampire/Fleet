@@ -6,6 +6,8 @@ import android.app.Application;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.widget.ImageView;
+import android.widget.PopupMenu;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -13,12 +15,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class SplashScreen extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.screen_splash);
         FirebaseUser user=FirebaseAuth.getInstance().getCurrentUser();
+
+
 
 
 
@@ -41,7 +44,6 @@ public class SplashScreen extends AppCompatActivity {
             finish();
             //the current activity will get finished.
         }, 3000);
-
 
     }
 }

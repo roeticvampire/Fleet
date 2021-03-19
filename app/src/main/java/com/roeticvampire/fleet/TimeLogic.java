@@ -6,8 +6,15 @@ public class TimeLogic {
     public static String CustomTimeFormat(String dateTime) {
         try{
             String currentTime = String.valueOf(new Timestamp(System.currentTimeMillis()));
-            if (!getYear(currentTime).equals(getYear(dateTime))) return getYear(dateTime);
-            if (!getDate(currentTime).equals(getDate(dateTime))) return getDate(dateTime);
+            if (!getYear(currentTime).equals(getYear(dateTime))) {
+                return "Last year";
+            }
+            if (!getDate(currentTime).equals(getDate(dateTime))) {
+
+
+
+                return getDate(dateTime);
+            }
             return getTime(dateTime);
         }
         catch (Exception e){

@@ -125,10 +125,10 @@ register_btn=findViewById(R.id.Continue_btn);
 
                     //for now we'll just add the user here anyway
                     //___________________________________________________________________________________________________________
-                        UserListDBHelper userListDBHelper=new UserListDBHelper(Register2.this);
-                        userListDBHelper.insertUser(name,username,data);
-                        ChatlistDBHelper chatlistDBHelper=new ChatlistDBHelper(Register2.this);
-                        chatlistDBHelper.addUser("Fleet_"+username);
+                        //UserListDBHelper userListDBHelper=new UserListDBHelper(Register2.this);
+                        //userListDBHelper.insertUser(name,username,data);
+                        //ChatlistDBHelper chatlistDBHelper=new ChatlistDBHelper(Register2.this);
+                        //chatlistDBHelper.addUser("Fleet_"+username);
                         //chatlistDBHelper.insertMessage("Fleet_"+username,"Well, technically it's all one person",false);
 
 
@@ -137,6 +137,7 @@ register_btn=findViewById(R.id.Continue_btn);
                     //___________________________________________________________________________________________________________
                     //fine the territory for mayhem is marked
                     startActivity(intent);
+                    finish();
                 }
             });
 

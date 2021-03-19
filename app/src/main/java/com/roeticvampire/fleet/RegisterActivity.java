@@ -108,6 +108,7 @@ public class RegisterActivity extends AppCompatActivity {
             intent.putExtra("email_id",email_input.getText().toString());
 
             startActivity(intent);
+            finish();
         }
     });
     }

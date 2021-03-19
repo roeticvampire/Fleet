@@ -78,6 +78,7 @@ public class LoginActivity extends AppCompatActivity {
                                                 editor.commit();
                                                 Intent intent= new Intent(LoginActivity.this,ChatlistActivity.class);
                                                 startActivity(intent);
+                                                finish();
                                             });
 
                                         }
