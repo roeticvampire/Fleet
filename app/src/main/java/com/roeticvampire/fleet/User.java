@@ -9,6 +9,8 @@ public class User {
     String email_id;
     //Object public_key;
 
+    public User() {
+    }
 
     public User(String name, String username, String email_id) {
         this.name = name;

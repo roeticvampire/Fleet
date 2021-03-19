@@ -110,15 +110,7 @@ register_btn=findViewById(R.id.Continue_btn);
                     FirebaseDatabase database = FirebaseDatabase.getInstance();
                     DatabaseReference myRef = database.getReference("Users");
                     myRef.child(username).setValue(new User(name,username,email_id));
-                    // Do what you want
 
-                    /*
-                    StorageReference pathReference=storage.getReference("images/"+username+".jpg");
-
-                    Glide.with(Register2.this)
-                            .load(pathReference).dontAnimate()
-                            .into(imageChooser);
-*/
                     SharedPreferences sharedpreferences = getSharedPreferences("personal_details", Context.MODE_PRIVATE);
                     Intent intent= new Intent (Register2.this,ChatlistActivity.class);
                     SharedPreferences.Editor editor = sharedpreferences.edit();
@@ -130,6 +122,7 @@ register_btn=findViewById(R.id.Continue_btn);
                     String encodedImage = Base64.encodeToString(data, Base64.DEFAULT);
                     editor.putString("image_data",encodedImage);
                     editor.commit();
+
                     //for now we'll just add the user here anyway
                     //___________________________________________________________________________________________________________
                         UserListDBHelper userListDBHelper=new UserListDBHelper(Register2.this);

@@ -3,17 +3,28 @@ package com.roeticvampire.fleet;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Base64;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.regex.Pattern;
 
@@ -44,8 +55,46 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful())
                         {
-                            Intent intent= new Intent(LoginActivity.this,ChatlistActivity.class);
-                        startActivity(intent);}
+                            //Successful login, so we need to import the user details, that we saved back in register2 activity
+                            FirebaseDatabase database = FirebaseDatabase.getInstance();
+                            DatabaseReference myRef = database.getReference("Users");
+                            myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    for(DataSnapshot user: snapshot.getChildren()){
+                                        User tempUser=user.getValue(User.class);
+                                        if(tempUser.getEmail_id().equals(email_id)){
+                                            SharedPreferences sharedpreferences = getSharedPreferences("personal_details", Context.MODE_PRIVATE);
+                                            SharedPreferences.Editor editor = sharedpreferences.edit();
+                                            editor.putString("name", tempUser.getName());
+                                            editor.putString("username", tempUser.getUsername());
+                                            editor.putString("email_id", email_id);
+                                            FirebaseStorage storage = FirebaseStorage.getInstance();
+                                            StorageReference storageRef = storage.getReference();
+                                            StorageReference imagesRef = storageRef.child("images/"+tempUser.getUsername()+".jpg");
+                                            imagesRef.getBytes(Long.MAX_VALUE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                                                @Override
+                                                public void onSuccess(byte[] bytes) {
+                                                    String encodedImage = Base64.encodeToString(bytes, Base64.DEFAULT);
+                                                    editor.putString("image_data",encodedImage);
+                                                    editor.commit();
+                                                    Intent intent= new Intent(LoginActivity.this,ChatlistActivity.class);
+                                                    startActivity(intent);
+                                                }
+                                            });
+
+                                        }
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                }
+                            });
+
+
+                            }
                         else
                             Toast.makeText(LoginActivity.this, "Wrong email or password!", Toast.LENGTH_SHORT).show();
 

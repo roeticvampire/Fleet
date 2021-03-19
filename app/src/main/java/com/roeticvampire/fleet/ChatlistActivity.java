@@ -13,11 +13,15 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Base64;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 
@@ -26,8 +30,8 @@ public class ChatlistActivity extends AppCompatActivity {
     ImageView User_profile_image;
     String name,username,email_id;
     TextView username_view,name_view,email_id_view;
-
-
+    RecyclerView recyclerView;
+    FloatingActionButton floatingActionButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,7 +56,11 @@ public class ChatlistActivity extends AppCompatActivity {
         name_view=findViewById(R.id.user_name);
         email_id_view=findViewById(R.id.user_email);
         username_view=findViewById(R.id.user_username);
-
+        floatingActionButton=findViewById(R.id.floatingActionButton);
+        floatingActionButton.setOnClickListener(v->{
+            FirebaseAuth fb=FirebaseAuth.getInstance();
+            fb.signOut();
+        });
         name_view.setText(name);
         username_view.setText(username);
         email_id_view.setText(email_id);
@@ -65,16 +73,6 @@ public class ChatlistActivity extends AppCompatActivity {
             Bitmap bitmap = BitmapFactory.decodeByteArray(b, 0, b.length);
             User_profile_image.setImageBitmap(bitmap);
         }
-
-
-
-
-
-
-
-
-
-
 
 
         ArrayList<chatlist_component> chatListMembers = new ArrayList<>();
@@ -96,7 +94,7 @@ public class ChatlistActivity extends AppCompatActivity {
         }
 
         // set up the RecyclerView
-        RecyclerView recyclerView = findViewById(R.id.chatlist_recyclerview);
+        recyclerView = findViewById(R.id.chatlist_recyclerview);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new chatlistAdapter(this, chatListMembers);
         recyclerView.setAdapter(adapter);
