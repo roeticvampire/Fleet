@@ -87,7 +87,7 @@ public class chatScreenActivity extends AppCompatActivity {
                     recyclerView.scrollToPosition(messageArrayList.size() - 1);
                 }
 
-                handler.postDelayed(this,4000);
+                handler.postDelayed(this,1000);
             }
 
 
@@ -120,7 +120,7 @@ public class chatScreenActivity extends AppCompatActivity {
                     //messageArrayList.add(new Message(true, sendText.getText().toString(), "now"));
 
                    //here'we're sending the msgs, to ourselves right now coz yay
-                   myRef.push().setValue(new FirebaseMessage(username,sendText.getText().toString()));
+                   myRef.push().setValue(new FirebaseMessage(((CustomApplication)getApplication()).getUsername(),sendText.getText().toString()));
 
 
 

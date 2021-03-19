@@ -75,6 +75,25 @@ public class UserListDBHelper extends SQLiteOpenHelper {
         else return false;
     }
 
+    public boolean insertUser (String name, String username, byte[] profile_pic,String last_msg) {
+        Cursor cs=getUser(username);
+        if(cs.getCount()>0)  return false;
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(USERLIST_NAME, name);
+        contentValues.put(USERLIST_USERNAME, username);
+        contentValues.put(USERLIST_LAST_MESSAGE,last_msg);
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        contentValues.put(USERLIST_LAST_MSG_TIMING,String.valueOf(timestamp));
+        contentValues.put(USERLIST_PROFILE_PIC,profile_pic);
+        contentValues.put(USERLIST_CHAT_TABLE_NAME, USERLIST_CHAT_TABLE_PREFIX+username);
+        long p=db.insert(USERLIST_TABLE_NAME, null, contentValues);
+        if(p!=-1)
+            return true;
+        else return false;
+    }
+
+
     public boolean deleteUser (String username) {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor= db.rawQuery("Select * from "+USERLIST_TABLE_NAME+" where "+USERLIST_USERNAME+" =?", new String[]{username});
@@ -86,13 +105,12 @@ public class UserListDBHelper extends SQLiteOpenHelper {
 
     public Cursor getAllUsers () {
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor= db.rawQuery("Select * from "+USERLIST_TABLE_NAME, null);
+        Cursor cursor= db.rawQuery("Select * from "+USERLIST_TABLE_NAME+" ORDER BY "+ USERLIST_LAST_MSG_TIMING+" DESC", null);
         return cursor;
     }
     public Cursor getUser (String username) {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor= db.rawQuery("Select * from "+USERLIST_TABLE_NAME+" where "+USERLIST_USERNAME+" =?", new String[]{username});
-
 
         return cursor;
     }
@@ -100,7 +118,7 @@ public class UserListDBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor= db.rawQuery("Select * from "+USERLIST_TABLE_NAME+" where "+USERLIST_USERNAME+" =?", new String[]{username});
         ContentValues contentValues = new ContentValues();
-        if(cursor==null)return false;
+        if(cursor.getCount()==0)return false;
         cursor.moveToFirst();
         contentValues.put(USERLIST_NAME, cursor.getString(1));
         contentValues.put(USERLIST_USERNAME, username);

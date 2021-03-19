@@ -72,15 +72,12 @@ public class LoginActivity extends AppCompatActivity {
                                             FirebaseStorage storage = FirebaseStorage.getInstance();
                                             StorageReference storageRef = storage.getReference();
                                             StorageReference imagesRef = storageRef.child("images/"+tempUser.getUsername()+".jpg");
-                                            imagesRef.getBytes(Long.MAX_VALUE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-                                                @Override
-                                                public void onSuccess(byte[] bytes) {
-                                                    String encodedImage = Base64.encodeToString(bytes, Base64.DEFAULT);
-                                                    editor.putString("image_data",encodedImage);
-                                                    editor.commit();
-                                                    Intent intent= new Intent(LoginActivity.this,ChatlistActivity.class);
-                                                    startActivity(intent);
-                                                }
+                                            imagesRef.getBytes(Long.MAX_VALUE).addOnSuccessListener(bytes -> {
+                                                String encodedImage = Base64.encodeToString(bytes, Base64.DEFAULT);
+                                                editor.putString("image_data",encodedImage);
+                                                editor.commit();
+                                                Intent intent= new Intent(LoginActivity.this,ChatlistActivity.class);
+                                                startActivity(intent);
                                             });
 
                                         }

@@ -12,6 +12,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Base64;
 import android.view.MotionEvent;
 import android.view.View;
@@ -32,6 +33,7 @@ public class ChatlistActivity extends AppCompatActivity {
     TextView username_view,name_view,email_id_view;
     RecyclerView recyclerView;
     FloatingActionButton floatingActionButton;
+    Handler handler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,29 +78,40 @@ public class ChatlistActivity extends AppCompatActivity {
 
 
         ArrayList<chatlist_component> chatListMembers = new ArrayList<>();
-
-
-        //retrieiving all user details
-        UserListDBHelper userListDBHelper=new UserListDBHelper(this);
-        Cursor csr=userListDBHelper.getAllUsers();
-        if(csr.getCount()>0){
-            while(csr.moveToNext()){
-                String name= csr.getString(1);
-                String username= csr.getString(2);
-                String last_message=csr.getString(4);
-                String last_message_time=csr.getString(5);
-                byte[] profile_image=csr.getBlob(6);
-                chatListMembers.add(new chatlist_component(name,username,last_message,profile_image,last_message_time));
-
-            }
-        }
-
-        // set up the RecyclerView
         recyclerView = findViewById(R.id.chatlist_recyclerview);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new chatlistAdapter(this, chatListMembers);
         recyclerView.setAdapter(adapter);
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+
+        //retrieiving all user details
+        UserListDBHelper userListDBHelper=new UserListDBHelper(this);
+        handler=new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Cursor csr=userListDBHelper.getAllUsers();
+                if(csr.getCount()>0){
+                    chatListMembers.clear();
+                    while(csr.moveToNext()){
+                        String name= csr.getString(1);
+                        String username= csr.getString(2);
+                        String last_message=csr.getString(4);
+                        String last_message_time=csr.getString(5);
+                        byte[] profile_image=csr.getBlob(6);
+                        chatListMembers.add(new chatlist_component(name,username,last_message,profile_image,last_message_time));
+
+                    }
+                    recyclerView.getAdapter().notifyDataSetChanged();
+                }
+
+                handler.postDelayed(this,1000);
+            }
+
+
+        },0);
+        // set up the RecyclerView
+
 
 
     }
