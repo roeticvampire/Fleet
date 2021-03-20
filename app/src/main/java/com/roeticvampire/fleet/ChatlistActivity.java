@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.animation.Animator;
+import android.app.Application;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -29,6 +30,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,12 +57,17 @@ public class ChatlistActivity extends AppCompatActivity {
     String newUserUsername;
     int btn_code=0; //0 for find user, 1 for found hogya chalo ab add krdo entry me
 
+    ImageView logoIcon;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chatlist);
-
-
+        logoIcon=findViewById(R.id.logoicon2);
+        logoIcon.setOnClickListener(v->{
+            FirebaseAuth.getInstance().signOut();
+            //System.exit(0);
+        });
         SharedPreferences sharedpreferences = getSharedPreferences("personal_details", Context.MODE_PRIVATE);
 
 
@@ -88,29 +95,31 @@ public class ChatlistActivity extends AppCompatActivity {
             dialog.setContentView(R.layout.adduser_fragment);
             dialog.setTitle("This is my custom dialog box");
             dialog.setCancelable(true);
-            dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                @Override
-                public void onCancel(DialogInterface dialog) {
-                    floatingActionButton.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rev_rotate));
 
-                }
+
+            dialog.setOnCancelListener(dialog1 -> {
+                floatingActionButton.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rev_rotate));
+                WindowManager.LayoutParams lp = getWindow().getAttributes();
+                lp.alpha=1f;
+                getWindow().setAttributes(lp);
             });
 
 
-            WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
-            lp.alpha=0.5f;
-            dialog.getWindow().setAttributes(lp);
+            WindowManager.LayoutParams lp = getWindow().getAttributes();
+             lp.alpha=0.6f;
+             getWindow().setAttributes(lp);
 
             EditText searchbar;
             TextView userPrompt;
+            ProgressBar loading_spinner;
             btn_code=0; //0 for find user, 1 for found hogya chalo ab add krdo entry me
 
             Button search_btn;
             searchbar=dialog.findViewById(R.id.search_username);
             userPrompt=dialog.findViewById(R.id.userPrompt);
             search_btn=dialog.findViewById(R.id.addUserButton);
-
-
+            loading_spinner=dialog.findViewById(R.id.loading_spinner);
+            loading_spinner.setVisibility(View.INVISIBLE);
 
 
 
@@ -119,13 +128,19 @@ public class ChatlistActivity extends AppCompatActivity {
             search_btn.setOnClickListener(ve->{
                 newUserUsername=searchbar.getText().toString();
                 if(newUserUsername.length()>0) {
+
+                    userPrompt.setVisibility(View.INVISIBLE);
+                    loading_spinner.setVisibility(View.VISIBLE);
                     FirebaseDatabase database = FirebaseDatabase.getInstance();
                     DatabaseReference myRef = database.getReference("Users");
                     if (btn_code == 0) {
                         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                loading_spinner.setVisibility(View.INVISIBLE);
                                 if (snapshot.hasChild(newUserUsername)) {
+
+
                                     userPrompt.setTextColor(getResources().getColor(R.color.green_success));
                                     userPrompt.setText("User found");
                                     userPrompt.setVisibility(View.VISIBLE);
@@ -174,7 +189,7 @@ public class ChatlistActivity extends AppCompatActivity {
                 }
             });
 
-
+            dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
             dialog.show();
 
 
@@ -208,6 +223,7 @@ public class ChatlistActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.chatlist_recyclerview);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new chatlistAdapter(this, chatListMembers);
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         recyclerView.setAdapter(adapter);
 
         //recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
@@ -233,7 +249,7 @@ public class ChatlistActivity extends AppCompatActivity {
                     recyclerView.getAdapter().notifyDataSetChanged();
                 }
 
-                handler.postDelayed(this,1000);
+                handler.postDelayed(this,3000);
             }
 
 

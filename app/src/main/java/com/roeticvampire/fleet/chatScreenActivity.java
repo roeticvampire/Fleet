@@ -112,7 +112,6 @@ public class chatScreenActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new chatboxAdapter(this, messageArrayList);
         recyclerView.setAdapter(adapter);
-        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
          recyclerView.scrollToPosition(messageArrayList.size() - 1);
 
         back_btn=findViewById(R.id.back_btn);

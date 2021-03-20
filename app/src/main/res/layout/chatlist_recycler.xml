@@ -88,7 +88,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:fontFamily="@font/gotham_book"
-                android:paddingHorizontal="4dp"
+                android:paddingHorizontal="7dp"
                 android:paddingRight="4dp"
                 android:text="Saturday"
                 android:textAlignment="viewEnd"

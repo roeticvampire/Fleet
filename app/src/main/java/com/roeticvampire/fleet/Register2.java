@@ -18,6 +18,7 @@ import android.util.Base64;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +40,7 @@ import java.lang.annotation.Target;
 
 public class Register2 extends AppCompatActivity {
 
+    LinearLayout primaryScreen,secondaryOverlay;
     TextView tap_to_change;
     ImageView imageChooser;
     private static final int IMAGE_PICK_CODE=1000;
@@ -55,6 +57,10 @@ public class Register2 extends AppCompatActivity {
 
 
         setContentView(R.layout.activity_register2);
+        primaryScreen=findViewById(R.id.default_layout);
+        secondaryOverlay=findViewById(R.id.waitingOverlay);
+
+        secondaryOverlay.setVisibility(View.INVISIBLE);
         tap_to_change=findViewById(R.id.rand);
         imageChooser=findViewById(R.id.profileImage);
         imageChooser.setMinimumHeight(imageChooser.getWidth());
@@ -87,6 +93,12 @@ public class Register2 extends AppCompatActivity {
 
 register_btn=findViewById(R.id.Continue_btn);
         register_btn.setOnClickListener(v->{
+
+            primaryScreen.setAlpha(0.2f);
+            primaryScreen.setClickable(false);
+            secondaryOverlay.setVisibility(View.VISIBLE);
+
+
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             Bitmap bitmap = ((BitmapDrawable) imageChooser.getDrawable()).getBitmap();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
