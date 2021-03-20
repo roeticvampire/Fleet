@@ -21,6 +21,7 @@ public class CustomApplication extends Application {
     UserListDBHelper userListDBHelper;
     String username="";
 
+
     public String getUsername() {
         return username;
     }
@@ -34,7 +35,6 @@ public class CustomApplication extends Application {
         super.onCreate();
         chatlistDBHelper=new ChatlistDBHelper(getApplicationContext());
         userListDBHelper=new UserListDBHelper(getApplicationContext());
-
 
 
         // Required initialization logic here!
@@ -67,6 +67,7 @@ public class CustomApplication extends Application {
                                 StorageReference imagesRef = storageRef.child("images/"+tempUser.getUsername()+".jpg");
                                 imagesRef.getBytes(Long.MAX_VALUE).addOnSuccessListener(bytes->{
                                     userListDBHelper.insertUser(tempUser.getName(),tempUser.getUsername(),bytes,fb.getMessage());
+
 
                                 });
 
