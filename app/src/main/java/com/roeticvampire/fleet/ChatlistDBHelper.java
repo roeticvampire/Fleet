@@ -47,13 +47,13 @@ public class ChatlistDBHelper extends SQLiteOpenHelper {
 
     }
     public void addUser(String userTableName){
-        String sql="create table if not exists "+userTableName+" (_id integer primary key autoincrement, "+CHATS_IS_USER+" integer,"+CHATS_MESSAGE+" text,"+CHATS_MESSAGE_TIME+" timestamp)";
+        String sql="create table if not exists "+userTableName+" (_id integer primary key autoincrement, "+CHATS_IS_USER+" integer,"+CHATS_MESSAGE+" blob,"+CHATS_MESSAGE_TIME+" timestamp)";
         this.getWritableDatabase().execSQL(sql);
 
     }
 
 
-    public boolean insertMessage (String tableName, String message,boolean isUser) {
+    public boolean insertMessage (String tableName, byte[] message,boolean isUser) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         if(isUser)
@@ -66,18 +66,14 @@ public class ChatlistDBHelper extends SQLiteOpenHelper {
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         contentValues.put(CHATS_MESSAGE_TIME, String.valueOf(timestamp));
         long p=db.insert(tableName, null, contentValues);
-        if(p!=-1)
-            return true;
-        else return false;
+        return p != -1;
     }
 
     public boolean deleteMsg (String tableName, int msg_id) {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor= db.rawQuery("Select * from "+tableName+" where _id =?", new String[]{String.valueOf(msg_id)});
         long p=db.delete(tableName,"_id =?", new String[]{String.valueOf(msg_id)} );
-        if(p!=-1)
-            return true;
-        else return false;
+        return p != -1;
     }
 
     public Cursor getAllMessages (String tableName) {

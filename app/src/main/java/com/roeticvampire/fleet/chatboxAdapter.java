@@ -13,8 +13,8 @@ import java.sql.Timestamp;
 import java.util.List;
 
 public class chatboxAdapter extends RecyclerView.Adapter<chatboxAdapter.ViewHolder> {
-    private List<Message> mData;
-    private LayoutInflater mInflater;
+    private final List<Message> mData;
+    private final LayoutInflater mInflater;
 
     private static final int USER_TEXT=1;
     private static final int OTHER_TEXT=2;

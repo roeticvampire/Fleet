@@ -17,9 +17,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 public class chatlistAdapter extends RecyclerView.Adapter<chatlistAdapter.ViewHolder> {
-    private List<chatlist_component> mData;
-    private LayoutInflater mInflater;
-    private Context context;
+    private final List<chatlist_component> mData;
+    private final LayoutInflater mInflater;
+    private final Context context;
     // data is passed into the constructor
     chatlistAdapter(Context context, List<chatlist_component> data) {
         this.mInflater = LayoutInflater.from(context);

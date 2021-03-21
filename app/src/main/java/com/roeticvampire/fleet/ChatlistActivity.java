@@ -44,6 +44,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class ChatlistActivity extends AppCompatActivity {
@@ -244,7 +245,12 @@ public class ChatlistActivity extends AppCompatActivity {
                     while(csr.moveToNext()){
                         String name= csr.getString(1);
                         String username= csr.getString(2);
-                        String last_message=csr.getString(4);
+                        String last_message= null;
+                        try {
+                            last_message = RSAEncyption.decryptData(csr.getBlob(4),((CustomApplication)getApplication()).user_PrivateKey);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                         String last_message_time=csr.getString(5);
                         byte[] profile_image=csr.getBlob(6);
                         chatListMembers.add(new chatlist_component(name,username,last_message,profile_image,last_message_time));

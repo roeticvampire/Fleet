@@ -32,7 +32,7 @@ public class UserListDBHelper extends SQLiteOpenHelper {
    1: name
    2: username
    3: chat table name
-   4: last message
+   4: last message blob
    5: last message time
    6: profile image blob
    7: public key blob
@@ -50,7 +50,7 @@ We'll add 7th as the Public Key blob
     public void onCreate(SQLiteDatabase db) {
 
        // String sql="create table "+USERLIST_TABLE_NAME+" (_id integer primary key autoincrement, "+USERLIST_NAME+" text,"+USERLIST_USERNAME+" text,"+USERLIST_CHAT_TABLE_NAME+" text, "+USERLIST_PUBLIC_KEY+" blob)";
-        String sql="create table "+USERLIST_TABLE_NAME+" (_id integer primary key autoincrement, "+USERLIST_NAME+" text,"+USERLIST_USERNAME+" text,"+USERLIST_CHAT_TABLE_NAME+" text,last_message text,last_msg_time text,profile_image blob,public_key blob)";
+        String sql="create table "+USERLIST_TABLE_NAME+" (_id integer primary key autoincrement, "+USERLIST_NAME+" text,"+USERLIST_USERNAME+" text,"+USERLIST_CHAT_TABLE_NAME+" text,last_message blob,last_msg_time text,profile_image blob,public_key blob)";
          db.execSQL(sql);
     }
 
@@ -72,12 +72,10 @@ We'll add 7th as the Public Key blob
         contentValues.put(USERLIST_CHAT_TABLE_NAME, USERLIST_CHAT_TABLE_PREFIX+username);
         contentValues.put(USERLIST_PUBLIC_KEY,public_key);
         long p=db.insert(USERLIST_TABLE_NAME, null, contentValues);
-        if(p!=-1)
-        return true;
-        else return false;
+        return p != -1;
     }
 
-    public boolean insertUser (String name, String username, byte[] profile_pic,String last_msg,byte[] public_key) {
+    public boolean insertUser (String name, String username, byte[] profile_pic,byte[] last_msg,byte[] public_key) {
         Cursor cs=getUser(username);
         if(cs.getCount()>0)  return false;
         SQLiteDatabase db = this.getWritableDatabase();
@@ -91,9 +89,7 @@ We'll add 7th as the Public Key blob
         contentValues.put(USERLIST_CHAT_TABLE_NAME, USERLIST_CHAT_TABLE_PREFIX+username);
         contentValues.put(USERLIST_PUBLIC_KEY,public_key);
         long p=db.insert(USERLIST_TABLE_NAME, null, contentValues);
-        if(p!=-1)
-            return true;
-        else return false;
+        return p != -1;
     }
 
 
@@ -101,9 +97,7 @@ We'll add 7th as the Public Key blob
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor= db.rawQuery("Select * from "+USERLIST_TABLE_NAME+" where "+USERLIST_USERNAME+" =?", new String[]{username});
         long p=db.delete(USERLIST_TABLE_NAME,USERLIST_USERNAME+" =?",new String[]{username} );
-        if(p!=-1)
-            return true;
-        else return false;
+        return p != -1;
     }
 
     public Cursor getAllUsers () {
@@ -117,7 +111,7 @@ We'll add 7th as the Public Key blob
 
         return cursor;
     }
-    public boolean updateLastText(String username, String last_message){
+    public boolean updateLastText(String username, byte[] last_message){
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor= db.rawQuery("Select * from "+USERLIST_TABLE_NAME+" where "+USERLIST_USERNAME+" =?", new String[]{username});
         ContentValues contentValues = new ContentValues();
@@ -137,9 +131,7 @@ We'll add 7th as the Public Key blob
 
 
         long p=db.update(USERLIST_TABLE_NAME,contentValues,USERLIST_USERNAME+" =?",new String[]{username} );
-        if(p!=-1)
-            return true;
-        else return false;
+        return p != -1;
     }
 
 }
