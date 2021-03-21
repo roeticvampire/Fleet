@@ -85,12 +85,29 @@ public class chatScreenActivity extends AppCompatActivity {
             while(csr.moveToNext()){
                 int msgId=csr.getInt(0);
                 boolean isUser= csr.getInt(1) == 1;
-                String msg= csr.getString(2);
+                String msg = null;
+                try {
+                    msg = RSAEncyption.decryptData(csr.getBlob(2),((CustomApplication)getApplication()).user_PrivateKey);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 String timing= csr.getString(3);
                 messageArrayList.add(new Message(msgId,isUser,msg,timing));
             }
         }
 
+        // set up the RecyclerView
+        recyclerView = findViewById(R.id.ChatScreenRecycler);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new chatboxAdapter(this, messageArrayList);
+        recyclerView.setAdapter(adapter);
+        recyclerView.scrollToPosition(messageArrayList.size() - 1);
+        back_btn=findViewById(R.id.back_btn);
+        profileImage=findViewById(R.id.profileImage);
+        usernameView=findViewById(R.id.user_username);
+        nameView=findViewById(R.id.user_name);
+        sendText=findViewById(R.id.username_input);
+        send_btn=findViewById(R.id.sendText_btn);
 
         handler=new Handler();
         handler.postDelayed(new Runnable() {
@@ -100,8 +117,13 @@ public class chatScreenActivity extends AppCompatActivity {
                 if(csr.getCount()>0){
                     while(csr.moveToNext()){
                         int msgId=csr.getInt(0);
-                        boolean isUser= csr.getInt(1)==1?true:false;
-                        String msg= csr.getString(2);
+                        boolean isUser= csr.getInt(1) == 1;
+                        String msg= null;
+                        try {
+                            msg = RSAEncyption.decryptData(csr.getBlob(2),((CustomApplication)getApplication()).user_PrivateKey);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                         String timing= csr.getString(3);
                         messageArrayList.add(new Message(msgId,isUser,msg,timing));
                     }
@@ -116,19 +138,7 @@ public class chatScreenActivity extends AppCompatActivity {
         },1000);
 
 
-        // set up the RecyclerView
-        recyclerView = findViewById(R.id.ChatScreenRecycler);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new chatboxAdapter(this, messageArrayList);
-        recyclerView.setAdapter(adapter);
-         recyclerView.scrollToPosition(messageArrayList.size() - 1);
 
-        back_btn=findViewById(R.id.back_btn);
-        profileImage=findViewById(R.id.profileImage);
-        usernameView=findViewById(R.id.user_username);
-        nameView=findViewById(R.id.user_name);
-        sendText=findViewById(R.id.username_input);
-        send_btn=findViewById(R.id.sendText_btn);
 
         back_btn.setOnClickListener(v -> finish());
         profileImage.setImageBitmap(profileImageData);
@@ -152,10 +162,22 @@ public class chatScreenActivity extends AppCompatActivity {
 
 
                    //will change this one later I guess
-                   chatlistDBHelper.insertMessage(tableName,sendText.getText().toString(),true);
-                   userListDbHelper.updateLastText(username,sendText.getText().toString());
-                    updateChats();
-                    recyclerView.getAdapter().notifyDataSetChanged();
+                   try {
+                       chatlistDBHelper.insertMessage(tableName,RSAEncyption.encryptData(sendText.getText().toString(), ((CustomApplication) getApplication()).getUser_PublicKey()),true);
+                   } catch (IOException e) {
+                       e.printStackTrace();
+                   }
+                   try {
+                       userListDbHelper.updateLastText(username,RSAEncyption.encryptData(sendText.getText().toString(), ((CustomApplication) getApplication()).getUser_PublicKey()));
+                   } catch (IOException e) {
+                       e.printStackTrace();
+                   }
+                   try {
+                       updateChats();
+                   } catch (IOException e) {
+                       e.printStackTrace();
+                   }
+                   recyclerView.getAdapter().notifyDataSetChanged();
                     recyclerView.scrollToPosition(messageArrayList.size() - 1);
                     sendText.setText("");
                 }
@@ -163,17 +185,16 @@ public class chatScreenActivity extends AppCompatActivity {
 
             }
 
-            private void updateChats(){int _id=0;
-                try {
+            private void updateChats() throws IOException {int _id=0;
                     _id = messageArrayList.get(messageArrayList.size() - 1).msgId;
-                }
-                catch(Exception e){}
+
+
                 Cursor csr=chatlistDBHelper.getNewMessages(tableName,_id);
                 if(csr.getCount()>0){
                     while(csr.moveToNext()){
                         int msgId=csr.getInt(0);
-                        boolean isUser= csr.getInt(1)==1?true:false;
-                        String msg= csr.getString(2);
+                        boolean isUser= csr.getInt(1) == 1;
+                        String msg= RSAEncyption.decryptData(csr.getBlob(2),((CustomApplication) getApplication()).getUser_PrivateKey());
                         String timing= csr.getString(3);
                         messageArrayList.add(new Message(msgId,isUser,msg,timing));
 
