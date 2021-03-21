@@ -47,14 +47,6 @@ public class chatlistAdapter extends RecyclerView.Adapter<chatlistAdapter.ViewHo
             public void onClick(View v) {
                 Intent intent =new Intent(context, chatScreenActivity.class);
                 intent.putExtra("username",mData.get(position).getChatUsername());
-                intent.putExtra("name",mData.get(position).getChatName());
-
-
-                SharedPreferences sharedpreferences = context.getSharedPreferences("frined_profile_data", Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedpreferences.edit();
-                String encodedImage = Base64.encodeToString(mData.get(position).getProfilePic(), Base64.DEFAULT);
-                editor.putString("image_data",encodedImage);
-                editor.commit();
                 context.startActivity(intent);
             }
         });

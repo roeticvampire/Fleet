@@ -52,24 +52,22 @@ public class chatScreenActivity extends AppCompatActivity {
         Intent intent=getIntent();
         name= intent.getStringExtra("name");
         username= intent.getStringExtra("username");
-
-        SharedPreferences sharedpreferences = getSharedPreferences("frined_profile_data", Context.MODE_PRIVATE);
-        String previouslyEncodedImage=sharedpreferences.getString("image_data", "");
-
-        if( !previouslyEncodedImage.equalsIgnoreCase("") ){
-            byte[] b = Base64.decode(previouslyEncodedImage, Base64.DEFAULT);
-            profileImageData = BitmapFactory.decodeByteArray(b, 0, b.length);
-
+        Cursor cesr=((CustomApplication)getApplication()).userListDBHelper.getUser(username);
+        if(cesr.getCount()>0){
+            while(cesr.moveToNext()){
+                name=cesr.getString(1);
+                byte[] b=cesr.getBlob(6);
+                profileImageData = BitmapFactory.decodeByteArray(b, 0, b.length);
+            }
         }
 
-        //profileImageData= BitmapFactory.decodeByteArray(intent.getByteArrayExtra("profileImage"), 0, intent.getByteArrayExtra("profileImage").length);
-        tableName="Fleet_"+username;
+
+       tableName="Fleet_"+username;
         myRef =  FirebaseDatabase.getInstance().getReference("messages").child(username);
         UserListDBHelper userListDbHelper = new UserListDBHelper(this);
 
         ChatlistDBHelper chatlistDBHelper=new ChatlistDBHelper(this);
         chatlistDBHelper.addUser(tableName);
-        //chatlistDBHelper.insertMessage("roetess","But you will never be left behind...",true);
 
         Cursor csr= chatlistDBHelper.getAllMessages(tableName);
         if(csr.getCount()>0){

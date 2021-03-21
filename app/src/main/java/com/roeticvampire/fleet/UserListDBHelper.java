@@ -36,6 +36,7 @@ public class UserListDBHelper extends SQLiteOpenHelper {
    5: last message time
    6: profile image blob
 
+We'll add 7th as the Public Key blob
     */
 
 
