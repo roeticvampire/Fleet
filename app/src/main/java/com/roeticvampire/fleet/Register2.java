@@ -103,7 +103,6 @@ register_btn=findViewById(R.id.Continue_btn);
         register_btn.setOnClickListener(v->{
 
             primaryScreen.setAlpha(0.2f);
-            primaryScreen.setClickable(false);
             secondaryOverlay.setVisibility(View.VISIBLE);
 
 

@@ -6,8 +6,10 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Base64;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -32,12 +34,14 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     EditText user_email_input, user_password_input;
     ImageButton login_btn;
+    LinearLayout primaryScreen,secondaryOverlay;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-
+        primaryScreen=findViewById(R.id.primaryView);
+secondaryOverlay=findViewById(R.id.waitingOverlay);
         SharedPreferences keycheck=getSharedPreferences("Personal_keys", Context.MODE_PRIVATE);
         if(keycheck.getString("privateKey","").equalsIgnoreCase("")){
             //we fooked up
@@ -75,6 +79,8 @@ public class LoginActivity extends AppCompatActivity {
             }
             //now we gotta check the regex for both our Strings
             else if(verifyCredentials(email_id,password)){
+                primaryScreen.setAlpha(0.2f);
+                secondaryOverlay.setVisibility(View.VISIBLE);
                 mAuth.signInWithEmailAndPassword(email_id,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {

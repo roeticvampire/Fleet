@@ -35,6 +35,7 @@ public class CustomApplication extends Application {
     String username="";
     PrivateKey user_PrivateKey;
     PublicKey user_PublicKey;
+    byte[] emptyMsg;
 
     KeyFactory kf = null; // or "EC" or whatever
     public PrivateKey getUser_PrivateKey() {
@@ -62,7 +63,11 @@ public class CustomApplication extends Application {
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
-
+        try {
+            emptyMsg=RSAEncyption.encryptData("",user_PublicKey);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         SharedPreferences keySharedPrefs=getSharedPreferences("Personal_keys", Context.MODE_PRIVATE);
 
         String encodedPrivateKey = keySharedPrefs.getString("privateKey","");

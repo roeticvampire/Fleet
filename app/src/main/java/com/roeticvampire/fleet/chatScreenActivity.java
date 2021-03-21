@@ -112,8 +112,13 @@ public class chatScreenActivity extends AppCompatActivity {
         handler=new Handler();
         handler.postDelayed(new Runnable() {
             @Override
-            public void run() {
-                Cursor csr=chatlistDBHelper.getNewMessages(tableName,messageArrayList.get(messageArrayList.size() - 1).msgId);
+            public void run() {Cursor csr;
+                try{
+                    csr = chatlistDBHelper.getNewMessages(tableName, messageArrayList.get(messageArrayList.size() - 1).msgId);
+                }
+                catch (Exception erer){
+                    csr = chatlistDBHelper.getNewMessages(tableName, 0);
+                }
                 if(csr.getCount()>0){
                     while(csr.moveToNext()){
                         int msgId=csr.getInt(0);
@@ -186,8 +191,10 @@ public class chatScreenActivity extends AppCompatActivity {
             }
 
             private void updateChats() throws IOException {int _id=0;
+                try{
                     _id = messageArrayList.get(messageArrayList.size() - 1).msgId;
-
+                }
+catch (Exception e){}
 
                 Cursor csr=chatlistDBHelper.getNewMessages(tableName,_id);
                 if(csr.getCount()>0){

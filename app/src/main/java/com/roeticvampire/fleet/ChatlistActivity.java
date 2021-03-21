@@ -57,7 +57,6 @@ public class ChatlistActivity extends AppCompatActivity {
     Handler handler;
     String newUserUsername;
     int btn_code=0; //0 for find user, 1 for found hogya chalo ab add krdo entry me
-
     ImageView logoIcon;
 
     @Override
@@ -65,9 +64,12 @@ public class ChatlistActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chatlist);
         logoIcon=findViewById(R.id.logoicon2);
-        logoIcon.setOnClickListener(v->{
+
+
+
+        logoIcon.setOnLongClickListener(v -> {
             FirebaseAuth.getInstance().signOut();
-            //System.exit(0);
+           return false;
         });
         SharedPreferences sharedpreferences = getSharedPreferences("personal_details", Context.MODE_PRIVATE);
 
@@ -174,9 +176,11 @@ public class ChatlistActivity extends AppCompatActivity {
                                     StorageReference publicKeyRef = storageRef.child("Public_Keys/"+tempUser.getUsername()+".key");
                                     publicKeyRef.getBytes(Long.MAX_VALUE).addOnSuccessListener(bytes2->{
                                         UserListDBHelper userListDBHelper = new UserListDBHelper(getApplicationContext());
-                                        userListDBHelper.insertUser(tempUser.getName(), tempUser.getUsername(), bytes,bytes2);
+                                        userListDBHelper.insertUser(tempUser.getName(), tempUser.getUsername(), bytes,((CustomApplication)getApplication()).emptyMsg,bytes2);
                                         dialog.dismiss();
-
+                                        WindowManager.LayoutParams lp = getWindow().getAttributes();
+                                        lp.alpha=1f;
+                                        getWindow().setAttributes(lp);
                                     });
                                 });
 
@@ -193,22 +197,8 @@ public class ChatlistActivity extends AppCompatActivity {
 
                 }
             });
-
             dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
             dialog.show();
-
-
-
-
-
-
-
-
-
-
-
-
-
         });
         name_view.setText(name);
         username_view.setText(username);

@@ -21,14 +21,6 @@ public class SplashScreen extends AppCompatActivity {
         setContentView(R.layout.screen_splash);
         FirebaseUser user=FirebaseAuth.getInstance().getCurrentUser();
 
-
-
-
-
-
-
-
-
         new Handler().postDelayed(() -> {
             Intent i;
             if(user!=null)

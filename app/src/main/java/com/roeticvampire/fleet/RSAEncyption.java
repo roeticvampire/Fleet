@@ -56,6 +56,9 @@ public class RSAEncyption {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return new String(decryptedData);
+    try    {
+            return new String(decryptedData);
+        }
+    catch (Exception e){return "";}
     }
 }
