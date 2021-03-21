@@ -111,8 +111,12 @@ public class CustomApplication extends Application {
                 if(userListDBHelper.getUser(fb.getUsername()).getCount()>0)
                 {
                     try {
-                       // chatlistDBHelper.insertMessage("Fleet_" + fb.getUsername(),RSAEncyption.decryptData( Base64.decode(fb.getMessage(),Base64.DEFAULT),user_PrivateKey), false);
-                         chatlistDBHelper.insertMessage("Fleet_" + fb.getUsername(),fb.getMessage(), false);
+                       chatlistDBHelper.insertMessage("Fleet_" + fb.getUsername(),RSAEncyption.decryptData( Base64.decode(fb.getMessage(),Base64.DEFAULT),user_PrivateKey), false);
+                        // chatlistDBHelper.insertMessage("Fleet_" + fb.getUsername(),fb.getMessage(), false);
+                         userListDBHelper.updateLastText(fb.getUsername(),RSAEncyption.decryptData( Base64.decode(fb.getMessage(), Base64.DEFAULT),user_PrivateKey));
+                            //userListDBHelper.updateLastText(fb.getUsername(),fb.getMessage());
+
+
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -121,8 +125,8 @@ public class CustomApplication extends Application {
                     {
                     chatlistDBHelper.addUser("Fleet_" + fb.getUsername());
                         try {
-                            //chatlistDBHelper.insertMessage("Fleet_" + fb.getUsername(),RSAEncyption.decryptData( Base64.decode(fb.getMessage(),Base64.DEFAULT),user_PrivateKey), false);
-                            chatlistDBHelper.insertMessage("Fleet_" + fb.getUsername(),fb.getMessage(), false);
+                            chatlistDBHelper.insertMessage("Fleet_" + fb.getUsername(),RSAEncyption.decryptData( Base64.decode(fb.getMessage(),Base64.DEFAULT),user_PrivateKey), false);
+                            //chatlistDBHelper.insertMessage("Fleet_" + fb.getUsername(),fb.getMessage(), false);
 
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -167,13 +171,7 @@ public class CustomApplication extends Application {
 
 
                 }
-                try {
-                   // userListDBHelper.updateLastText(fb.getUsername(),RSAEncyption.decryptData( Base64.decode(fb.getMessage(), Base64.DEFAULT),user_PrivateKey));
-                    userListDBHelper.updateLastText(fb.getUsername(),fb.getMessage());
 
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
                 myRef.child(snapshot.getKey()).removeValue();
 
 

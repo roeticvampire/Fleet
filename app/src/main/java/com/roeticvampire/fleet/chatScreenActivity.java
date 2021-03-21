@@ -113,7 +113,7 @@ public class chatScreenActivity extends AppCompatActivity {
             }
 
 
-        },10000000);
+        },1000);
 
 
         // set up the RecyclerView
@@ -142,8 +142,8 @@ public class chatScreenActivity extends AppCompatActivity {
 
                    //here'we're sending the msgs, to ourselves right now coz yay
                    try {
-                       //FirebaseMessage fb=new FirebaseMessage(((CustomApplication)getApplication()).getUsername(),Base64.encodeToString(RSAEncyption.encryptData(sendText.getText().toString(), publicKey),Base64.DEFAULT));
-                       FirebaseMessage fb=new FirebaseMessage(((CustomApplication)getApplication()).getUsername(),(sendText.getText().toString()));
+                       FirebaseMessage fb=new FirebaseMessage(((CustomApplication)getApplication()).getUsername(),Base64.encodeToString(RSAEncyption.encryptData(sendText.getText().toString(), publicKey),Base64.DEFAULT));
+                       //FirebaseMessage fb=new FirebaseMessage(((CustomApplication)getApplication()).getUsername(),(sendText.getText().toString()));
 
                        myRef.push().setValue(fb);
                    } catch (Exception e) {
