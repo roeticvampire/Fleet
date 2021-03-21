@@ -1,6 +1,11 @@
 package com.roeticvampire.fleet;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,13 +19,31 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.io.IOException;
+import java.security.KeyFactory;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 import java.sql.SQLException;
 
 public class CustomApplication extends Application {
     ChatlistDBHelper chatlistDBHelper;
     UserListDBHelper userListDBHelper;
     String username="";
+    PrivateKey user_PrivateKey;
+    PublicKey user_PublicKey;
 
+    KeyFactory kf = null; // or "EC" or whatever
+    public PrivateKey getUser_PrivateKey() {
+        return user_PrivateKey;
+    }
+
+    public PublicKey getUser_PublicKey() {
+        return user_PublicKey;
+    }
 
     public String getUsername() {
         return username;
@@ -33,6 +56,42 @@ public class CustomApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        try {
+            kf = KeyFactory.getInstance("RSA");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+        SharedPreferences keySharedPrefs=getSharedPreferences("Personal_keys", Context.MODE_PRIVATE);
+
+        String encodedPrivateKey = keySharedPrefs.getString("privateKey","");
+        String encodedPublicKey = keySharedPrefs.getString("publicKey","");
+        if( !encodedPrivateKey.equalsIgnoreCase("") ){
+            byte[] b = Base64.decode(encodedPrivateKey, Base64.DEFAULT);
+            try {
+                user_PrivateKey = kf.generatePrivate(new PKCS8EncodedKeySpec(b));
+            } catch (InvalidKeySpecException e) {
+                e.printStackTrace();
+            }
+        }
+        if( !encodedPublicKey.equalsIgnoreCase("") ){
+            byte[] b = Base64.decode(encodedPublicKey, Base64.DEFAULT);
+            try {
+                user_PublicKey =kf.generatePublic(new X509EncodedKeySpec(b));
+            } catch (InvalidKeySpecException e) {
+                e.printStackTrace();
+            }
+        }
+        //okay so now we have both of the keys we made in place xD
+
+
+
+
+
+
+
+
         chatlistDBHelper=new ChatlistDBHelper(getApplicationContext());
         userListDBHelper=new UserListDBHelper(getApplicationContext());
 
@@ -51,11 +110,23 @@ public class CustomApplication extends Application {
                 //process it into a msg, then delete this shit
                 if(userListDBHelper.getUser(fb.getUsername()).getCount()>0)
                 {
-                    chatlistDBHelper.insertMessage("Fleet_" + fb.getUsername(), fb.getMessage(), false);
+                    try {
+                       // chatlistDBHelper.insertMessage("Fleet_" + fb.getUsername(),RSAEncyption.decryptData( Base64.decode(fb.getMessage(),Base64.DEFAULT),user_PrivateKey), false);
+                         chatlistDBHelper.insertMessage("Fleet_" + fb.getUsername(),fb.getMessage(), false);
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }else
                     {
                     chatlistDBHelper.addUser("Fleet_" + fb.getUsername());
-                    chatlistDBHelper.insertMessage("Fleet_" + fb.getUsername(), fb.getMessage(), false);
+                        try {
+                            //chatlistDBHelper.insertMessage("Fleet_" + fb.getUsername(),RSAEncyption.decryptData( Base64.decode(fb.getMessage(),Base64.DEFAULT),user_PrivateKey), false);
+                            chatlistDBHelper.insertMessage("Fleet_" + fb.getUsername(),fb.getMessage(), false);
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                         FirebaseDatabase database = FirebaseDatabase.getInstance();
                         DatabaseReference myRef = database.getReference("Users").child(fb.getUsername());
                         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -66,8 +137,15 @@ public class CustomApplication extends Application {
                                 StorageReference storageRef = storage.getReference();
                                 StorageReference imagesRef = storageRef.child("images/"+tempUser.getUsername()+".jpg");
                                 imagesRef.getBytes(Long.MAX_VALUE).addOnSuccessListener(bytes->{
-                                    userListDBHelper.insertUser(tempUser.getName(),tempUser.getUsername(),bytes,fb.getMessage());
+                                    StorageReference publicKeyRef = storageRef.child("Public_Keys/"+tempUser.getUsername()+".key");
+                                    publicKeyRef.getBytes(Long.MAX_VALUE).addOnSuccessListener(bytes1 -> {
 
+                                        try {
+                                            userListDBHelper.insertUser(tempUser.getName(),tempUser.getUsername(),bytes,RSAEncyption.decryptData( Base64.decode(fb.getMessage(), Base64.DEFAULT),user_PrivateKey),bytes1);
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
+                                    });
 
                                 });
 
@@ -89,7 +167,13 @@ public class CustomApplication extends Application {
 
 
                 }
-            userListDBHelper.updateLastText(fb.getUsername(),fb.getMessage());
+                try {
+                   // userListDBHelper.updateLastText(fb.getUsername(),RSAEncyption.decryptData( Base64.decode(fb.getMessage(), Base64.DEFAULT),user_PrivateKey));
+                    userListDBHelper.updateLastText(fb.getUsername(),fb.getMessage());
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 myRef.child(snapshot.getKey()).removeValue();
 
 

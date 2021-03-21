@@ -1,20 +1,19 @@
 package com.roeticvampire.fleet;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Base64;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -38,6 +37,29 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+
+        SharedPreferences keycheck=getSharedPreferences("Personal_keys", Context.MODE_PRIVATE);
+        if(keycheck.getString("privateKey","").equalsIgnoreCase("")){
+            //we fooked up
+            Toast.makeText(this, "Can't Proceed with the login.\nPlease create a new account.", Toast.LENGTH_LONG).show();
+            new Handler().postDelayed(() -> {
+                //invoke the SecondActivity.
+                startActivity(new Intent(LoginActivity.this,RegisterActivity.class));
+                //the current activity will get finished.
+            }, 3000);
+        }
+
+        SharedPreferences sharedpreferences = getSharedPreferences("personal_details", Context.MODE_PRIVATE);
+        String prev_email=sharedpreferences.getString("email_id","");
+
+
+
+
+
+
+
+
+
         mAuth = FirebaseAuth.getInstance();
 
         user_email_input =findViewById(R.id.input_email);
@@ -47,9 +69,12 @@ public class LoginActivity extends AppCompatActivity {
             //
             String email_id= user_email_input.getText().toString();
             String password= user_password_input.getText().toString();
+            if(!prev_email.equals(email_id)){
+                Toast.makeText(this,"Please Log in with previously used email.",Toast.LENGTH_SHORT);
 
+            }
             //now we gotta check the regex for both our Strings
-            if(verifyCredentials(email_id,password)){
+            else if(verifyCredentials(email_id,password)){
                 mAuth.signInWithEmailAndPassword(email_id,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -73,12 +98,21 @@ public class LoginActivity extends AppCompatActivity {
                                             StorageReference storageRef = storage.getReference();
                                             StorageReference imagesRef = storageRef.child("images/"+tempUser.getUsername()+".jpg");
                                             imagesRef.getBytes(Long.MAX_VALUE).addOnSuccessListener(bytes -> {
-                                                String encodedImage = Base64.encodeToString(bytes, Base64.DEFAULT);
-                                                editor.putString("image_data",encodedImage);
-                                                editor.commit();
-                                                Intent intent= new Intent(LoginActivity.this,ChatlistActivity.class);
-                                                startActivity(intent);
-                                                finish();
+
+                                                StorageReference publicKeyRef = storageRef.child("Public_Keys/"+tempUser.getUsername()+".key");
+                                                publicKeyRef.getBytes(Long.MAX_VALUE).addOnSuccessListener(bytes1 -> {
+                                                    SharedPreferences.Editor editor1=keycheck.edit();
+                                                    String encodedPublicKey = Base64.encodeToString(bytes1, Base64.DEFAULT);
+                                                    editor1.putString("publicKey",encodedPublicKey);
+                                                    editor1.commit();
+                                                    String encodedImage = Base64.encodeToString(bytes, Base64.DEFAULT);
+                                                    editor.putString("image_data", encodedImage);
+                                                    editor.commit();
+                                                    Intent intent = new Intent(LoginActivity.this, ChatlistActivity.class);
+                                                    startActivity(intent);
+                                                    finish();
+                                                });
+
                                             });
 
                                         }

@@ -24,6 +24,10 @@ import android.widget.TextView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.IOException;
+import java.security.PublicKey;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.ArrayList;
 
 public class chatScreenActivity extends AppCompatActivity {
@@ -40,6 +44,7 @@ public class chatScreenActivity extends AppCompatActivity {
     String tableName;
     Bitmap profileImageData;
     DatabaseReference myRef;
+    PublicKey publicKey;
     @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +63,12 @@ public class chatScreenActivity extends AppCompatActivity {
                 name=cesr.getString(1);
                 byte[] b=cesr.getBlob(6);
                 profileImageData = BitmapFactory.decodeByteArray(b, 0, b.length);
+
+                try {
+                    publicKey=((CustomApplication)getApplication()).kf.generatePublic(new X509EncodedKeySpec(cesr.getBlob(7)));
+                } catch (InvalidKeySpecException e) {
+                    e.printStackTrace();
+                }
             }
         }
 
@@ -102,7 +113,7 @@ public class chatScreenActivity extends AppCompatActivity {
             }
 
 
-        },20000);
+        },10000000);
 
 
         // set up the RecyclerView
@@ -130,13 +141,17 @@ public class chatScreenActivity extends AppCompatActivity {
                     //messageArrayList.add(new Message(true, sendText.getText().toString(), "now"));
 
                    //here'we're sending the msgs, to ourselves right now coz yay
-                   myRef.push().setValue(new FirebaseMessage(((CustomApplication)getApplication()).getUsername(),sendText.getText().toString()));
+                   try {
+                       //FirebaseMessage fb=new FirebaseMessage(((CustomApplication)getApplication()).getUsername(),Base64.encodeToString(RSAEncyption.encryptData(sendText.getText().toString(), publicKey),Base64.DEFAULT));
+                       FirebaseMessage fb=new FirebaseMessage(((CustomApplication)getApplication()).getUsername(),(sendText.getText().toString()));
+
+                       myRef.push().setValue(fb);
+                   } catch (Exception e) {
+                       e.printStackTrace();
+                   }
 
 
-
-
-
-                    //will change this one later I guess
+                   //will change this one later I guess
                    chatlistDBHelper.insertMessage(tableName,sendText.getText().toString(),true);
                    userListDbHelper.updateLastText(username,sendText.getText().toString());
                     updateChats();

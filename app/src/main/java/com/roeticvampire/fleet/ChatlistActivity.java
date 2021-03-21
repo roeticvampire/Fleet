@@ -170,9 +170,13 @@ public class ChatlistActivity extends AppCompatActivity {
                                 StorageReference storageRef = storage.getReference();
                                 StorageReference imagesRef = storageRef.child("images/" + tempUser.getUsername() + ".jpg");
                                 imagesRef.getBytes(Long.MAX_VALUE).addOnSuccessListener(bytes -> {
-                                    UserListDBHelper userListDBHelper = new UserListDBHelper(getApplicationContext());
-                                    userListDBHelper.insertUser(tempUser.getName(), tempUser.getUsername(), bytes);
-                                    dialog.dismiss();
+                                    StorageReference publicKeyRef = storageRef.child("Public_Keys/"+tempUser.getUsername()+".key");
+                                    publicKeyRef.getBytes(Long.MAX_VALUE).addOnSuccessListener(bytes2->{
+                                        UserListDBHelper userListDBHelper = new UserListDBHelper(getApplicationContext());
+                                        userListDBHelper.insertUser(tempUser.getName(), tempUser.getUsername(), bytes,bytes2);
+                                        dialog.dismiss();
+
+                                    });
                                 });
 
 

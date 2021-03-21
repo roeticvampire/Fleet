@@ -26,8 +26,10 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -37,6 +39,10 @@ import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.io.ByteArrayOutputStream;
 import java.lang.annotation.Target;
+import java.security.KeyPair;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 
 public class Register2 extends AppCompatActivity {
 
@@ -47,6 +53,8 @@ public class Register2 extends AppCompatActivity {
     private static final int PERMISSION_CODE=1001;
     String name,username,email_id;
     ImageButton register_btn;
+    PrivateKey user_privateKey;
+    PublicKey user_publicKey;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,6 +107,29 @@ register_btn=findViewById(R.id.Continue_btn);
             secondaryOverlay.setVisibility(View.VISIBLE);
 
 
+            //_________________________________________________________________________________________________
+            try {
+                KeyPair kp= RSAEncyption.generateKeyPair();
+                user_privateKey=kp.getPrivate();
+                user_publicKey=kp.getPublic();
+
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            }
+
+            SharedPreferences keySharedPrefs=getSharedPreferences("Personal_keys", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor1 = keySharedPrefs.edit();
+            String encodedPrivateKey = Base64.encodeToString(user_privateKey.getEncoded(), Base64.DEFAULT);
+            String encodedPublicKey = Base64.encodeToString(user_publicKey.getEncoded(), Base64.DEFAULT);
+
+            editor1.putString("privateKey",encodedPrivateKey);
+            editor1.putString("publicKey",encodedPublicKey);
+            editor1.commit();
+            //_________________________________________________________________________________________________
+
+
+
+
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             Bitmap bitmap = ((BitmapDrawable) imageChooser.getDrawable()).getBitmap();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
@@ -108,50 +139,61 @@ register_btn=findViewById(R.id.Continue_btn);
             StorageReference storageRef = storage.getReference();
             StorageReference imagesRef = storageRef.child("images/"+username+".jpg");
 
-            UploadTask uploadTask = imagesRef.putBytes(data);
-            uploadTask.addOnFailureListener(new OnFailureListener() {
+
+            StorageReference publicKeyRef = storageRef.child("Public_Keys/"+username+".key");
+
+            UploadTask uploadPublicKey = publicKeyRef.putBytes(user_publicKey.getEncoded());
+            uploadPublicKey.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                 @Override
-                public void onFailure(@NonNull Exception exception) {
-                    Toast.makeText(Register2.this, "Oops, something's fishy!\nWanna try again?", Toast.LENGTH_SHORT).show();
-                }
-            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                    UploadTask uploadTask = imagesRef.putBytes(data);
+                    //the immediate bottom one will have to be triggered after we cooking it raw uploading PublicKey in firebase Storage
+                    {uploadTask.addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            Toast.makeText(Register2.this, "Oops, something's fishy!\nWanna try again?", Toast.LENGTH_SHORT).show();
+                        }
+                    }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
 
-                    FirebaseDatabase database = FirebaseDatabase.getInstance();
-                    DatabaseReference myRef = database.getReference("Users");
-                    myRef.child(username).setValue(new User(name,username,email_id));
+                            FirebaseDatabase database = FirebaseDatabase.getInstance();
+                            DatabaseReference myRef = database.getReference("Users");
+                            myRef.child(username).setValue(new User(name,username,email_id));
 
-                    SharedPreferences sharedpreferences = getSharedPreferences("personal_details", Context.MODE_PRIVATE);
-                    Intent intent= new Intent (Register2.this,ChatlistActivity.class);
-                    SharedPreferences.Editor editor = sharedpreferences.edit();
+                            SharedPreferences sharedpreferences = getSharedPreferences("personal_details", Context.MODE_PRIVATE);
+                            Intent intent= new Intent (Register2.this,ChatlistActivity.class);
+                            SharedPreferences.Editor editor = sharedpreferences.edit();
 
-                    editor.putString("name", name);
-                    editor.putString("username", username);
-                    editor.putString("email_id", email_id);
+                            editor.putString("name", name);
+                            editor.putString("username", username);
+                            editor.putString("email_id", email_id);
 
-                    String encodedImage = Base64.encodeToString(data, Base64.DEFAULT);
-                    editor.putString("image_data",encodedImage);
-                    editor.commit();
+                            String encodedImage = Base64.encodeToString(data, Base64.DEFAULT);
+                            editor.putString("image_data",encodedImage);
+                            editor.commit();
 
-                    //for now we'll just add the user here anyway
-                    //___________________________________________________________________________________________________________
-                        //UserListDBHelper userListDBHelper=new UserListDBHelper(Register2.this);
-                        //userListDBHelper.insertUser(name,username,data);
-                        //ChatlistDBHelper chatlistDBHelper=new ChatlistDBHelper(Register2.this);
-                        //chatlistDBHelper.addUser("Fleet_"+username);
-                        //chatlistDBHelper.insertMessage("Fleet_"+username,"Well, technically it's all one person",false);
-
-
+                            //for now we'll just add the user here anyway
+                            //___________________________________________________________________________________________________________
+                            //UserListDBHelper userListDBHelper=new UserListDBHelper(Register2.this);
+                            //userListDBHelper.insertUser(name,username,data);
+                            //ChatlistDBHelper chatlistDBHelper=new ChatlistDBHelper(Register2.this);
+                            //chatlistDBHelper.addUser("Fleet_"+username);
+                            //chatlistDBHelper.insertMessage("Fleet_"+username,"Well, technically it's all one person",false);
 
 
-                    //___________________________________________________________________________________________________________
-                    //fine the territory for mayhem is marked
-                    startActivity(intent);
-                    finish();
+
+
+                            //___________________________________________________________________________________________________________
+                            //fine the territory for mayhem is marked
+                            startActivity(intent);
+                            finish();
+                        }
+                    });}
                 }
             });
+
 
 
 
