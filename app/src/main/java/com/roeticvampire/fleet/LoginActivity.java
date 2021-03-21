@@ -10,12 +10,14 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -35,7 +37,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText user_email_input, user_password_input;
     ImageButton login_btn;
     LinearLayout primaryScreen,secondaryOverlay;
-
+    TextView forgot_password;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +47,7 @@ secondaryOverlay=findViewById(R.id.waitingOverlay);
         SharedPreferences keycheck=getSharedPreferences("Personal_keys", Context.MODE_PRIVATE);
         if(keycheck.getString("privateKey","").equalsIgnoreCase("")){
             //we fooked up
-            user_email_input.setError("Can't Proceed with the login.\nPlease create a new account.");
+            //user_email_input.setError("Can't Proceed with the login.\nPlease create a new account.");
             Toast.makeText(this, "Can't Proceed with the login.\nPlease create a new account.", Toast.LENGTH_LONG).show();
             new Handler().postDelayed(() -> {
                 //invoke the SecondActivity.
@@ -66,7 +68,15 @@ secondaryOverlay=findViewById(R.id.waitingOverlay);
 
 
         mAuth = FirebaseAuth.getInstance();
-
+        forgot_password=findViewById(R.id.forgot_password);
+        forgot_password.setOnClickListener(v->{
+            FirebaseAuth.getInstance().sendPasswordResetEmail(user_email_input.getText().toString()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    Toast.makeText(LoginActivity.this,"Password reset email sent.",Toast.LENGTH_SHORT);
+                }
+            });
+        });
         user_email_input =findViewById(R.id.input_email);
         user_password_input =findViewById(R.id.login_password);
         login_btn=findViewById(R.id.Continue_btn);
@@ -75,6 +85,7 @@ secondaryOverlay=findViewById(R.id.waitingOverlay);
             String email_id= user_email_input.getText().toString();
             String password= user_password_input.getText().toString();
             if(!prev_email.equals(email_id)){
+                user_email_input.setError("Please Log in with previously used email.");
                 Toast.makeText(LoginActivity.this,"Please Log in with previously used email.",Toast.LENGTH_SHORT);
 
             }

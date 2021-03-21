@@ -75,12 +75,12 @@ public class RegisterActivity extends AppCompatActivity {
                 "A-Z]{2,7}$";
         Pattern pat = Pattern.compile(emailRegex);
         if( !pat.matcher(email_input.getText().toString()).matches()) {
-            Toast.makeText(this, "Invalid Email", Toast.LENGTH_SHORT).show();
+            email_input.setError("Invalid Email");
             return false;
         }
         //email,name,username, password,password2
         if (usernames.contains(username_input.getText().toString())) {
-            Toast.makeText(this, "Username already taken!", Toast.LENGTH_SHORT).show();
+            username_input.setError("Username already taken!");
             return false;
         }
 
@@ -89,7 +89,7 @@ public class RegisterActivity extends AppCompatActivity {
             return false;
         }
         if(!password_input.getText().toString().equals(password2_input.getText().toString())) {
-            Toast.makeText(this, "Passwords do not match!", Toast.LENGTH_SHORT).show();
+            password2_input.setError("Passwords do not match!");
             return false;
         }
 
