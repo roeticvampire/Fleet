@@ -45,6 +45,7 @@ secondaryOverlay=findViewById(R.id.waitingOverlay);
         SharedPreferences keycheck=getSharedPreferences("Personal_keys", Context.MODE_PRIVATE);
         if(keycheck.getString("privateKey","").equalsIgnoreCase("")){
             //we fooked up
+            user_email_input.setError("Can't Proceed with the login.\nPlease create a new account.");
             Toast.makeText(this, "Can't Proceed with the login.\nPlease create a new account.", Toast.LENGTH_LONG).show();
             new Handler().postDelayed(() -> {
                 //invoke the SecondActivity.
@@ -74,7 +75,7 @@ secondaryOverlay=findViewById(R.id.waitingOverlay);
             String email_id= user_email_input.getText().toString();
             String password= user_password_input.getText().toString();
             if(!prev_email.equals(email_id)){
-                Toast.makeText(this,"Please Log in with previously used email.",Toast.LENGTH_SHORT);
+                Toast.makeText(LoginActivity.this,"Please Log in with previously used email.",Toast.LENGTH_SHORT);
 
             }
             //now we gotta check the regex for both our Strings

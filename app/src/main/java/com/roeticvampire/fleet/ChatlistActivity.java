@@ -69,6 +69,7 @@ public class ChatlistActivity extends AppCompatActivity {
 
         logoIcon.setOnLongClickListener(v -> {
             FirebaseAuth.getInstance().signOut();
+            Toast.makeText(ChatlistActivity.this,"You've been signed out.",Toast.LENGTH_SHORT);
            return false;
         });
         SharedPreferences sharedpreferences = getSharedPreferences("personal_details", Context.MODE_PRIVATE);

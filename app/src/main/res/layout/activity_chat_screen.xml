@@ -113,7 +113,7 @@
             android:paddingHorizontal="8sp"
             android:paddingVertical="12sp"
             android:textColor="@color/light_blue"
-            android:textColorHighlight="@color/light_blue"
+            android:textColorHighlight="@color/dark_blue"
             android:textSize="14sp" />
 
         <ImageButton
