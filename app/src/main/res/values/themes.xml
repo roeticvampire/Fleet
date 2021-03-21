@@ -2,6 +2,7 @@
     <!-- Base application theme. -->
     <style name="Theme.Fleet" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
+        <item name="android:navigationBarColor">@color/dark_blue</item>
         <item name="colorPrimary">@color/dark_blue</item>
         <item name="colorPrimaryVariant">@color/background_dark</item>
         <item name="colorOnPrimary">@color/light_blue</item>
