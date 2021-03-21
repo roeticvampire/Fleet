@@ -147,9 +147,7 @@ public class LoginActivity extends AppCompatActivity {
         Pattern pat = Pattern.compile(emailRegex);
         if( !pat.matcher(email_id).matches())
             return false;
-        if(password.length()>15||password.length()<6) return false;
-
-        return true;
+        return password.length() <= 15 && password.length() >= 6;
     }
 
     public void onStart() {
