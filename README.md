@@ -46,7 +46,7 @@ For the signed v2 release apk:
 
 #### Screenshots
 
--Firebase Realtime Database Snapshot
+- Firebase Realtime Database Snapshot
 ![Chats Snapshot](readme/firebase_realtimeSnapshot.png)
 
 - Chats Database Snapshot
