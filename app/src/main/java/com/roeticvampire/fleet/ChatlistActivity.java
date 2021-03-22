@@ -239,7 +239,7 @@ public class ChatlistActivity extends AppCompatActivity {
                         String last_message= null;
                         try {
                             last_message = RSAEncyption.decryptData(csr.getBlob(4),((CustomApplication)getApplication()).user_PrivateKey);
-                        } catch (IOException e) {
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                         String last_message_time=csr.getString(5);

@@ -63,11 +63,7 @@ public class CustomApplication extends Application {
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
-        try {
-            emptyMsg=RSAEncyption.encryptData("",user_PublicKey);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
         SharedPreferences keySharedPrefs=getSharedPreferences("Personal_keys", Context.MODE_PRIVATE);
 
         String encodedPrivateKey = keySharedPrefs.getString("privateKey","");
@@ -90,7 +86,11 @@ public class CustomApplication extends Application {
         }
         //okay so now we have both of the keys we made in place xD
 
-
+        try {
+            emptyMsg=RSAEncyption.encryptData("",user_PublicKey);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 
 
