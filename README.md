@@ -46,11 +46,17 @@ For the signed v2 release apk:
 [Fleet v1.0 apk]
 
 #### Screenshots
+
+-Firebase Realtime Database Snapshot
+![Chats Snapshot](readme/firebase_realtimeSnapshot.png)
+
 - Chats Database Snapshot
 ![Chats Snapshot](readme/chats_snapshot.png)
 
 - Users Database Snapshot
 ![Users Snapshot](readme/userlist_snapshot.png)
+
+####Thanks for giving me your time xD
 
 [//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
 
@@ -58,6 +64,6 @@ For the signed v2 release apk:
    [RSA]: <https://github.com/anujpatel/RSA-Algorithm/blob/master/RSAEncryptionDescription.java>
    [Glide]: <https://github.com/bumptech/glide>
    [Gulp]: <http://gulpjs.com>
-   [Fleet v1.0 apk]: <https://github.com/roeticvampire/Fleet/blob/master/app/release/app-release.apk>
+   [Fleet v1.0 apk]: <app/release/app-release.apk>
 [Android Image Cropper]:<https://github.com/ArthurHub/Android-Image-Cropper>
   
